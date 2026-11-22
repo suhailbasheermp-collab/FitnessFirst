@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta name="theme-color" content="#0d0e12" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Fit4Less • Iron & Science</title>
   <link rel="manifest" href="./manifest.json" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -38,23 +38,23 @@
             <h1 class="text-base font-extrabold tracking-tight text-white">My Plan</h1>
             <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/25">Fit4Less</span>
           </div>
-          <p id="headerSubtitle" class="text-[11px] text-slate-400 font-medium">45–60m Strength, Functional & Mobility</p>
+          <p class="text-[11px] text-slate-400 font-medium">45–60m Strength, Functional & Mobility</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <button onclick="openBackupModal()" title="Backup & Restore" class="relative w-9 h-9 rounded-full card-surface flex items-center justify-center text-slate-300 hover:text-white active:scale-95 transition">
+        <button type="button" onclick="openBackupModal()" title="Backup & Restore" class="relative w-9 h-9 rounded-full card-surface flex items-center justify-center text-slate-300 hover:text-white active:scale-95 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
           </svg>
           <span id="saveDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400"></span>
         </button>
 
-        <button id="unitBtn" onclick="toggleUnit()" class="h-9 px-3 rounded-full card-surface text-xs font-bold text-slate-200 hover:border-white/20 active:scale-95 transition">
+        <button type="button" id="unitBtn" onclick="toggleUnit()" class="h-9 px-3 rounded-full card-surface text-xs font-bold text-slate-200 hover:border-white/20 active:scale-95 transition">
           LBS
         </button>
 
-        <button onclick="openTimerModal(90, 'Rest Timer')" class="w-9 h-9 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 active:scale-95 transition">
+        <button type="button" onclick="openTimerModal(90, 'Rest Timer')" class="w-9 h-9 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 active:scale-95 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
             <circle cx="12" cy="13" r="8" />
             <path stroke-linecap="round" d="M12 9v4l2.5 2.5M9 2h6" />
@@ -69,21 +69,19 @@
 
     <!-- VIEW 1: PLAN & DASHBOARD -->
     <section id="view-plan" class="space-y-5">
-      <!-- Daily Plan Header & Split Switcher -->
       <div class="flex items-center justify-between">
         <div>
           <h2 class="text-lg font-bold text-white">Daily Plan</h2>
-          <p class="text-xs text-slate-400" id="dbStatusText">Loading Fit4Less database...</p>
+          <p class="text-xs text-slate-400" id="dbStatusText">54 Fit4Less movements ready</p>
         </div>
         <div class="card-surface p-1 rounded-full flex items-center gap-1">
-          <button id="split4Btn" onclick="setSplitDays(4)" class="px-3 py-1 rounded-full text-xs font-bold transition bg-amber-500 text-slate-950">4-Day</button>
-          <button id="split5Btn" onclick="setSplitDays(5)" class="px-3 py-1 rounded-full text-xs font-bold transition text-slate-400 hover:text-white">5-Day</button>
+          <button type="button" id="split4Btn" onclick="setSplitDays(4)" class="px-3 py-1 rounded-full text-xs font-bold transition bg-amber-500 text-slate-950">4-Day</button>
+          <button type="button" id="split5Btn" onclick="setSplitDays(5)" class="px-3 py-1 rounded-full text-xs font-bold transition text-slate-400 hover:text-white">5-Day</button>
         </div>
       </div>
 
-      <!-- 2x2 Metric Grid (Modern Fitness Tracker Style) -->
+      <!-- 2x2 Metric Grid -->
       <div class="grid grid-cols-2 gap-3">
-        <!-- Card 1: Session Target -->
         <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
           <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-slate-400">Session Time</span>
@@ -97,7 +95,6 @@
           </div>
         </div>
 
-        <!-- Card 2: Weekly Volume -->
         <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
           <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-slate-400">Total Volume</span>
@@ -111,7 +108,6 @@
           </div>
         </div>
 
-        <!-- Card 3: Workouts Logged -->
         <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
           <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-slate-400">Sessions Done</span>
@@ -125,7 +121,6 @@
           </div>
         </div>
 
-        <!-- Card 4: Exercise Library -->
         <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
           <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-slate-400">Exercise Pool</span>
@@ -134,13 +129,13 @@
             </div>
           </div>
           <div class="mt-3">
-            <span id="dashDbCount" class="text-2xl font-extrabold text-white">66</span>
+            <span id="dashDbCount" class="text-2xl font-extrabold text-white">54</span>
             <span class="text-xs text-slate-400 font-medium ml-1">movements</span>
           </div>
         </div>
       </div>
 
-      <!-- Weekly Schedule Cards ("Goal in progress" style) -->
+      <!-- Weekly Schedule Cards -->
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="text-base font-bold text-white">Weekly Rotation</h3>
@@ -152,7 +147,6 @@
 
     <!-- VIEW 2: ACTIVE WORKOUT SESSION -->
     <section id="view-workout" class="hidden space-y-4">
-      <!-- Active Session Header -->
       <div class="card-surface rounded-3xl p-4 flex items-center justify-between">
         <div>
           <span id="activeDayBadge" class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Day 1</span>
@@ -160,16 +154,14 @@
           <p id="activeDayMeta" class="text-xs text-slate-400 mt-0.5">8 Exercises • ~55 min</p>
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="openQuickAddToDayModal()" class="px-3 py-2 rounded-2xl card-elevated text-xs font-bold text-slate-200 hover:text-white active:scale-95 transition">
+          <button type="button" onclick="openQuickAddToDayModal()" class="px-3 py-2 rounded-2xl card-elevated text-xs font-bold text-slate-200 hover:text-white active:scale-95 transition">
             + Exercise
           </button>
-          <button onclick="finishWorkoutSession()" class="px-3.5 py-2 rounded-2xl bg-emerald-500 text-slate-950 text-xs font-extrabold shadow-lg shadow-emerald-500/20 active:scale-95 transition">
+          <button type="button" onclick="finishWorkoutSession()" class="px-3.5 py-2 rounded-2xl bg-emerald-500 text-slate-950 text-xs font-extrabold shadow-lg shadow-emerald-500/20 active:scale-95 transition">
             Finish
           </button>
         </div>
       </div>
-
-      <!-- Active Exercises List -->
       <div id="activeExercisesContainer" class="space-y-3.5"></div>
     </section>
 
@@ -180,12 +172,11 @@
           <h2 class="text-lg font-bold text-white">Workout Database</h2>
           <p class="text-xs text-slate-400">Add custom exercises or browse movements</p>
         </div>
-        <button onclick="toggleAddExerciseForm()" class="px-3.5 py-2 rounded-full bg-amber-500 text-slate-950 text-xs font-extrabold shadow-lg shadow-amber-500/20 active:scale-95 transition">
+        <button type="button" onclick="toggleAddExerciseForm()" class="px-3.5 py-2 rounded-full bg-amber-500 text-slate-950 text-xs font-extrabold shadow-lg shadow-amber-500/20 active:scale-95 transition">
           + New Workout
         </button>
       </div>
 
-      <!-- Add Custom Workout Form -->
       <form id="customExerciseForm" onsubmit="saveCustomExercise(event)" class="hidden card-surface rounded-3xl p-4 space-y-3.5 border border-amber-500/30">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-bold text-amber-400">Add Custom Workout to Database</h3>
@@ -263,31 +254,29 @@
         </button>
       </form>
 
-      <!-- Search & Filter Pills -->
       <input id="libSearch" oninput="renderLibrary()" type="text" placeholder="Search bench, deadlift, pull-up, isometric, mobility..." class="w-full px-4 py-3 rounded-2xl card-surface text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500" />
 
       <div id="libFilters" class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-        <button onclick="setLibFilter('All')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500 text-slate-950 whitespace-nowrap">All</button>
-        <button onclick="setLibFilter('Compound')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Compound</button>
-        <button onclick="setLibFilter('Functional')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Functional</button>
-        <button onclick="setLibFilter('Isometric')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Isometric</button>
-        <button onclick="setLibFilter('Mobility')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Mobility</button>
-        <button onclick="setLibFilter('Chest')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Chest</button>
-        <button onclick="setLibFilter('Back')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Back</button>
-        <button onclick="setLibFilter('Legs')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Legs</button>
-        <button onclick="setLibFilter('Shoulders')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Shoulders</button>
-        <button onclick="setLibFilter('Arms')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Arms</button>
-        <button onclick="setLibFilter('Core')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Core</button>
+        <button type="button" onclick="setLibFilter('All')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500 text-slate-950 whitespace-nowrap">All</button>
+        <button type="button" onclick="setLibFilter('Compound')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Compound</button>
+        <button type="button" onclick="setLibFilter('Functional')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Functional</button>
+        <button type="button" onclick="setLibFilter('Isometric')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Isometric</button>
+        <button type="button" onclick="setLibFilter('Mobility')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Mobility</button>
+        <button type="button" onclick="setLibFilter('Chest')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Chest</button>
+        <button type="button" onclick="setLibFilter('Back')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Back</button>
+        <button type="button" onclick="setLibFilter('Legs')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Legs</button>
+        <button type="button" onclick="setLibFilter('Shoulders')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Shoulders</button>
+        <button type="button" onclick="setLibFilter('Arms')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Arms</button>
+        <button type="button" onclick="setLibFilter('Core')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Core</button>
       </div>
 
       <div id="libraryList" class="space-y-2.5"></div>
     </section>
 
-    <!-- VIEW 4: PROGRESS & ANALYTICS (Radial Ring + Bar Style) -->
+    <!-- VIEW 4: PROGRESS & ANALYTICS -->
     <section id="view-progress" class="hidden space-y-4">
       <h2 class="text-lg font-bold text-white">Performance & Progression</h2>
 
-      <!-- Radial Gauge Card (Inspired by Screenshot 2) -->
       <div class="card-surface rounded-3xl p-5 flex flex-col items-center">
         <div class="w-full flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-slate-400">Weekly Consistency Goal</span>
@@ -323,7 +312,6 @@
           </div>
         </div>
 
-        <!-- Color-coded Muscle Focus Bars -->
         <div class="w-full grid grid-cols-3 gap-3 pt-3 mt-2 border-t border-white/5">
           <div>
             <div class="flex justify-between text-[11px] mb-1">
@@ -355,7 +343,6 @@
         </div>
       </div>
 
-      <!-- One-Tap Backup & Restore Card -->
       <div class="card-surface rounded-3xl p-4 space-y-3">
         <div class="flex items-center justify-between">
           <div>
@@ -365,24 +352,20 @@
           <span class="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold">Protected</span>
         </div>
         <div class="grid grid-cols-2 gap-2.5">
-          <button onclick="exportBackupJSON()" class="py-2.5 px-3 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3"/></svg>
+          <button type="button" onclick="exportBackupJSON()" class="py-2.5 px-3 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition">
             Export JSON
           </button>
-          <button onclick="triggerImportFile()" class="py-2.5 px-3 rounded-2xl card-elevated text-white font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 8l-4-4m0 0L8 8m4-4v12"/></svg>
+          <button type="button" onclick="triggerImportFile()" class="py-2.5 px-3 rounded-2xl card-elevated text-white font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition">
             Import JSON
           </button>
         </div>
       </div>
 
-      <!-- Personal Records & Progression List -->
       <div class="space-y-2.5">
         <h3 class="text-sm font-bold text-white">Lift & Isometric Progression</h3>
         <div id="prListContainer" class="space-y-2"></div>
       </div>
 
-      <!-- Session History -->
       <div class="space-y-2.5">
         <h3 class="text-sm font-bold text-white">Recent Completed Sessions</h3>
         <div id="historyListContainer" class="space-y-2"></div>
@@ -391,32 +374,31 @@
 
   </main>
 
-  <!-- Hidden File Input for JSON Import -->
   <input type="file" id="importFileInput" accept=".json,application/json" class="hidden" onchange="handleImportFileSelect(event)" />
 
   <!-- Bottom Navigation Bar -->
   <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#12141c]/95 backdrop-blur-md border-t border-white/5 px-4 py-2.5">
     <div class="max-w-lg mx-auto grid grid-cols-4 gap-1">
-      <button onclick="switchTab('plan')" id="nav-plan" class="nav-btn flex flex-col items-center gap-1 py-1 text-amber-400">
+      <button type="button" onclick="switchTab('plan')" id="nav-plan" class="nav-btn flex flex-col items-center gap-1 py-1 text-amber-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
         <span class="text-[10px] font-bold">Plan</span>
       </button>
-      <button onclick="switchTab('workout')" id="nav-workout" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
+      <button type="button" onclick="switchTab('workout')" id="nav-workout" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         <span class="text-[10px] font-bold">Train</span>
       </button>
-      <button onclick="switchTab('library')" id="nav-library" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
+      <button type="button" onclick="switchTab('library')" id="nav-library" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
         <span class="text-[10px] font-bold">Library</span>
       </button>
-      <button onclick="switchTab('progress')" id="nav-progress" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
+      <button type="button" onclick="switchTab('progress')" id="nav-progress" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         <span class="text-[10px] font-bold">Stats</span>
       </button>
     </div>
   </nav>
 
-  <!-- MODAL: REST & ISOMETRIC INTERVAL TIMER -->
+  <!-- MODAL: TIMER -->
   <div id="timerModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
     <div class="card-surface w-full max-w-sm rounded-3xl p-6 space-y-5 border border-white/10">
       <div class="flex items-center justify-between">
@@ -424,33 +406,30 @@
           <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Interval / Rest</span>
           <h3 id="timerTitle" class="text-base font-extrabold text-white">Rest Timer</h3>
         </div>
-        <button onclick="closeTimerModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400 hover:text-white">✕</button>
+        <button type="button" onclick="closeTimerModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400 hover:text-white">✕</button>
       </div>
-
       <div class="text-center py-4">
         <div id="timerDisplay" class="text-5xl font-extrabold tracking-tight text-white tabular-nums">01:30</div>
       </div>
-
       <div class="grid grid-cols-4 gap-2">
-        <button onclick="setTimerSeconds(30)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">30s</button>
-        <button onclick="setTimerSeconds(45)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">45s</button>
-        <button onclick="setTimerSeconds(90)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">90s</button>
-        <button onclick="setTimerSeconds(150)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">2m30</button>
+        <button type="button" onclick="setTimerSeconds(30)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">30s</button>
+        <button type="button" onclick="setTimerSeconds(45)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">45s</button>
+        <button type="button" onclick="setTimerSeconds(90)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">90s</button>
+        <button type="button" onclick="setTimerSeconds(150)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">2m30</button>
       </div>
-
       <div class="grid grid-cols-2 gap-3">
-        <button id="timerToggleBtn" onclick="toggleTimerRunning()" class="py-3 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-sm">Pause</button>
-        <button onclick="resetTimer()" class="py-3 rounded-2xl card-elevated text-white font-bold text-sm">Reset</button>
+        <button type="button" id="timerToggleBtn" onclick="toggleTimerRunning()" class="py-3 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-sm">Pause</button>
+        <button type="button" onclick="resetTimer()" class="py-3 rounded-2xl card-elevated text-white font-bold text-sm">Reset</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: BACKUP & RESTORE -->
+  <!-- MODAL: BACKUP -->
   <div id="backupModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
     <div class="card-surface w-full max-w-sm rounded-3xl p-5 space-y-4 border border-white/10">
       <div class="flex items-center justify-between">
         <h3 class="text-base font-extrabold text-white">Backup & Restore</h3>
-        <button onclick="closeBackupModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400">✕</button>
+        <button type="button" onclick="closeBackupModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400">✕</button>
       </div>
       <p class="text-xs text-slate-400 leading-relaxed">
         Your sets, progression PRs, and custom exercises save automatically on this device. Export a JSON file anytime to keep a portable backup.
@@ -459,36 +438,33 @@
       <div id="importPreviewBox" class="hidden p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2.5">
         <p id="importPreviewText" class="text-xs text-amber-200 font-medium"></p>
         <div class="grid grid-cols-2 gap-2">
-          <button onclick="confirmImport('overwrite')" class="py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-extrabold">Overwrite All</button>
-          <button onclick="confirmImport('merge')" class="py-2 rounded-xl card-elevated text-white text-xs font-bold">Merge Data</button>
+          <button type="button" onclick="confirmImport('overwrite')" class="py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-extrabold">Overwrite All</button>
+          <button type="button" onclick="confirmImport('merge')" class="py-2 rounded-xl card-elevated text-white text-xs font-bold">Merge Data</button>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-2.5 pt-1">
-        <button onclick="exportBackupJSON()" class="py-3 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-xs">Export JSON</button>
-        <button onclick="triggerImportFile()" class="py-3 rounded-2xl card-elevated text-white font-bold text-xs">Import JSON</button>
+        <button type="button" onclick="exportBackupJSON()" class="py-3 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-xs">Export JSON</button>
+        <button type="button" onclick="triggerImportFile()" class="py-3 rounded-2xl card-elevated text-white font-bold text-xs">Import JSON</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: QUICK ADD EXERCISE TO ACTIVE SESSION -->
+  <!-- MODAL: QUICK ADD -->
   <div id="quickAddModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
     <div class="card-surface w-full max-w-md rounded-3xl p-5 space-y-3 border border-white/10 max-h-[80vh] flex flex-col">
       <div class="flex items-center justify-between">
         <h3 class="text-base font-extrabold text-white">Add Exercise to Session</h3>
-        <button onclick="closeQuickAddModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400">✕</button>
+        <button type="button" onclick="closeQuickAddModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400">✕</button>
       </div>
       <input id="quickAddSearch" oninput="renderQuickAddList()" type="text" placeholder="Search database..." class="w-full px-3.5 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white" />
       <div id="quickAddList" class="overflow-y-auto space-y-2 pr-1 flex-1"></div>
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
   <div id="toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-emerald-500 text-slate-950 text-xs font-extrabold shadow-xl"></div>
 
   <script>
-    // Built-in fallback exercise database (used if exercises.json is absent or offline before cache)
     const FALLBACK_EXERCISES = [
-      // CHEST
       { id: "c1", name: "Barbell Flat Bench Press", muscle: "Chest", type: "Compound", mode: "reps", equip: "Barbell + Bench", sets: 4, target: "6-8", rest: 150, science: "High mechanical tension across sternal pectoralis; primary horizontal push overload." },
       { id: "c2", name: "Incline Dumbbell Press (30°)", muscle: "Chest", type: "Compound", mode: "reps", equip: "Dumbbells + Incline Bench", sets: 3, target: "8-12", rest: 120, science: "30° bench angle maximizes clavicular upper-pec recruitment while reducing front delt strain." },
       { id: "c3", name: "Weighted / Bodyweight Chest Dips", muscle: "Chest", type: "Compound", mode: "reps", equip: "Dip Station", sets: 3, target: "8-12", rest: 120, science: "Slight forward torso lean shifts load onto lower sternal fibers and triceps." },
@@ -496,7 +472,6 @@
       { id: "c5", name: "Seated Pec Deck Machine Fly", muscle: "Chest", type: "Hypertrophy", mode: "reps", equip: "Pec Deck Machine", sets: 3, target: "12-15", rest: 75, science: "High stability allows safe training close to muscular failure in stretched position." },
       { id: "c6", name: "Deficit Push-Up Isometric Pause", muscle: "Chest", type: "Isometric", mode: "time", equip: "Dumbbells / Floor", sets: 3, target: "35s", rest: 60, science: "Loaded stretch isometric at bottom increases tendon stiffness and motor unit recruitment." },
 
-      // BACK
       { id: "b1", name: "Weighted / Bodyweight Pull-Ups", muscle: "Back", type: "Compound", mode: "reps", equip: "Pull-Up Bar", sets: 4, target: "6-10", rest: 150, science: "Overhead vertical pull drives maximal latissimus dorsi and lower trapezius activation." },
       { id: "b2", name: "Supinated Chin-Ups", muscle: "Back", type: "Compound", mode: "reps", equip: "Pull-Up Bar", sets: 3, target: "6-10", rest: 120, science: "Underhand grip increases biceps brachii leverage and lower-lat stretch." },
       { id: "b3", name: "Neutral-Grip Pull-Ups", muscle: "Back", type: "Compound", mode: "reps", equip: "Parallel Handles", sets: 3, target: "8-10", rest: 120, science: "Shoulder-friendly humeral plane with heavy brachialis and lat involvement." },
@@ -507,57 +482,51 @@
       { id: "b8", name: "Straight-Arm Cable Lat Pullover", muscle: "Back", type: "Hypertrophy", mode: "reps", equip: "High Cable + Rope", sets: 3, target: "12-15", rest: 60, science: "Isolates shoulder extension without biceps fatigue." },
       { id: "b9", name: "Active Scapular Dead Hang", muscle: "Back", type: "Isometric", mode: "time", equip: "Pull-Up Bar", sets: 3, target: "45s", rest: 60, science: "Decompresses thoracic spine, strengthens grip endurance, and improves overhead mobility." },
 
-      // LEGS
       { id: "l1", name: "Barbell Back Squat", muscle: "Legs", type: "Compound", mode: "reps", equip: "Power Rack + Barbell", sets: 4, target: "6-8", rest: 180, science: "Deep knee and hip flexion maximizes quadriceps and adductor magnus hypertrophy." },
       { id: "l2", name: "Conventional / Trap Bar Deadlift", muscle: "Legs", type: "Compound", mode: "reps", equip: "Barbell / Trap Bar", sets: 3, target: "5-6", rest: 180, science: "Highest total-body mechanical load across posterior chain, glutes, and traps." },
       { id: "l3", name: "Romanian Deadlift (RDL)", muscle: "Legs", type: "Compound", mode: "reps", equip: "Barbell or Dumbbells", sets: 3, target: "8-10", rest: 150, science: "Emphasizes lengthened-partial hamstring tension and hip hinge mechanics." },
       { id: "l4", name: "Bulgarian Split Squat", muscle: "Legs", type: "Functional", mode: "reps", equip: "Dumbbells + Bench", sets: 3, target: "8-10/leg", rest: 90, science: "Corrects bilateral strength asymmetries while challenging glute medius stabilization." },
       { id: "l5", name: "45° Leg Press", muscle: "Legs", type: "Compound", mode: "reps", equip: "Leg Press Machine", sets: 3, target: "10-15", rest: 120, science: "High quad stimulus with minimal axial spinal loading." },
-      { id: "l6", name: "Seated Leg Curl", muscle: "Legs", type: "Hypertrophy", mode: "reps", equip: "Seated Curl Machine", sets: 3, target: "10-15", rest: 75, science: "Seated hip flexion places biarticular hamstrings at longer muscle lengths for superior growth." },
+      { id: "l6", name: "Seated Leg Curl", muscle: "Legs", type: "Hypertrophy", mode: "reps", equip: "Seated Curl Machine", sets: 3, target: "10-15", rest: 75, science: "Seated hip flexion places biarticular hamstrings at longer muscle lengths." },
       { id: "l7", name: "Leg Extension (2s Peak Hold)", muscle: "Legs", type: "Hypertrophy", mode: "reps", equip: "Leg Extension Machine", sets: 3, target: "12-15", rest: 75, science: "Targets rectus femoris which receives less stimulus during compound squats." },
       { id: "l8", name: "Barbell Hip Thrust", muscle: "Legs", type: "Compound", mode: "reps", equip: "Barbell + Bench", sets: 3, target: "8-12", rest: 120, science: "Peak torque at end-range hip extension maximizes gluteus maximus activation." },
-      { id: "l9", name: "Standing Calf Raise (3s Stretch)", muscle: "Legs", type: "Hypertrophy", mode: "reps", equip: "Calf Machine / Smith", sets: 4, target: "10-15", rest: 60, science: "Pausing in full dorsiflexion eliminates Achilles elastic rebound for gastrocnemius growth." },
+      { id: "l9", name: "Standing Calf Raise (3s Stretch)", muscle: "Legs", type: "Hypertrophy", mode: "reps", equip: "Calf Machine / Smith", sets: 4, target: "10-15", rest: 60, science: "Pausing in full dorsiflexion eliminates Achilles elastic rebound." },
       { id: "l10", name: "90° Spanish Squat / Wall Sit", muscle: "Legs", type: "Isometric", mode: "time", equip: "Wall / Heavy Band", sets: 3, target: "45s", rest: 60, science: "Isometric quad loading provides analgesic patellar tendon relief and endurance." },
 
-      // SHOULDERS
       { id: "s1", name: "Standing Barbell Overhead Press", muscle: "Shoulders", type: "Compound", mode: "reps", equip: "Barbell", sets: 4, target: "6-8", rest: 150, science: "Builds anterior/medial deltoid strength alongside full-body anti-extension stability." },
       { id: "s2", name: "Seated Dumbbell Shoulder Press", muscle: "Shoulders", type: "Compound", mode: "reps", equip: "Dumbbells + Bench", sets: 3, target: "8-12", rest: 120, science: "Free scapular plane path reduces subacromial impingement risk." },
       { id: "s3", name: "Cable Lateral Raise (Behind Back)", muscle: "Shoulders", type: "Hypertrophy", mode: "reps", equip: "Low Cable", sets: 4, target: "12-16", rest: 60, science: "Provides peak tension in the lengthened bottom half of lateral deltoid abduction." },
       { id: "s4", name: "Dumbbell Lateral Raise", muscle: "Shoulders", type: "Hypertrophy", mode: "reps", equip: "Dumbbells", sets: 3, target: "12-15", rest: 60, science: "30° scapular plane elevation optimizes medial delt fiber alignment." },
-      { id: "s5", name: "Cable Face Pulls (External Rotation)", muscle: "Shoulders", type: "Functional", mode: "reps", equip: "Cable + Rope", sets: 3, target: "15-20", rest: 60, science: "Strengthens infraspinatus, teres minor, and rear delts to counterbalance heavy pressing." },
+      { id: "s5", name: "Cable Face Pulls (External Rotation)", muscle: "Shoulders", type: "Functional", mode: "reps", equip: "Cable + Rope", sets: 3, target: "15-20", rest: 60, science: "Strengthens infraspinatus, teres minor, and rear delts." },
       { id: "s6", name: "Reverse Pec Deck Rear Delt Fly", muscle: "Shoulders", type: "Hypertrophy", mode: "reps", equip: "Pec Deck Machine", sets: 3, target: "12-15", rest: 60, science: "Isolates posterior deltoid without upper-trap momentum." },
       { id: "s7", name: "Bottoms-Up Kettlebell Overhead Hold", muscle: "Shoulders", type: "Isometric", mode: "time", equip: "Kettlebell", sets: 3, target: "30s/arm", rest: 60, science: "Irradiation reflex forces reflexive rotator cuff co-contraction." },
 
-      // ARMS
       { id: "a1", name: "Incline Dumbbell Biceps Curl", muscle: "Arms", type: "Hypertrophy", mode: "reps", equip: "Dumbbells + Incline Bench", sets: 3, target: "10-12", rest: 75, science: "Shoulder hyperextension stretches the long head of biceps brachii." },
       { id: "a2", name: "EZ-Bar / Cable Preacher Curl", muscle: "Arms", type: "Hypertrophy", mode: "reps", equip: "Preacher Bench", sets: 3, target: "10-12", rest: 75, science: "Locks humerus in flexion to overload short head and brachialis." },
       { id: "a3", name: "Cross-Body Dumbbell Hammer Curl", muscle: "Arms", type: "Hypertrophy", mode: "reps", equip: "Dumbbells", sets: 3, target: "10-12", rest: 60, science: "Neutral wrist position targets brachioradialis and deep brachialis." },
-      { id: "a4", name: "Overhead Cable Triceps Extension", muscle: "Arms", type: "Hypertrophy", mode: "reps", equip: "Cable + Rope", sets: 3, target: "10-15", rest: 75, science: "Overhead humerus elevation stretches the long head of triceps for superior hypertrophy." },
-      { id: "a5", name: "Cable Triceps Rope Pushdown", muscle: "Arms", type: "Hypertrophy", mode: "reps", equip: "High Cable + Rope", sets: 3, target: "12-15", rest: 60, science: "High medial and lateral triceps head recruitment with joint-friendly resistance." },
+      { id: "a4", name: "Overhead Cable Triceps Extension", muscle: "Arms", type: "Hypertrophy", mode: "reps", equip: "Cable + Rope", sets: 3, target: "10-15", rest: 75, science: "Overhead humerus elevation stretches the long head of triceps." },
+      { id: "a5", name: "Cable Triceps Rope Pushdown", muscle: "Arms", type: "Hypertrophy", mode: "reps", equip: "High Cable + Rope", sets: 3, target: "12-15", rest: 60, science: "High medial and lateral triceps head recruitment." },
       { id: "a6", name: "90° Isometric Chin-Up Hold", muscle: "Arms", type: "Isometric", mode: "time", equip: "Pull-Up Bar", sets: 3, target: "30s", rest: 60, science: "Maximal elbow flexor motor unit recruitment at peak mechanical disadvantage." },
 
-      // FUNCTIONAL & CORE
-      { id: "f1", name: "Heavy Kettlebell Swings", muscle: "Full Body", type: "Functional", mode: "reps", equip: "Kettlebell", sets: 4, target: "15-20", rest: 75, science: "Ballistic hip-hinge power with high posterior shear endurance and conditioning." },
+      { id: "f1", name: "Heavy Kettlebell Swings", muscle: "Full Body", type: "Functional", mode: "reps", equip: "Kettlebell", sets: 4, target: "15-20", rest: 75, science: "Ballistic hip-hinge power with high posterior shear endurance." },
       { id: "f2", name: "Heavy Farmer's Carries", muscle: "Full Body", type: "Functional", mode: "time", equip: "Heavy Dumbbells / Trap Bar", sets: 3, target: "45s", rest: 90, science: "Builds crush grip, upper-trap endurance, and dynamic lateral core stiffness." },
-      { id: "f3", name: "Turkish Get-Up (Controlled)", muscle: "Full Body", type: "Functional", mode: "reps", equip: "Kettlebell / Dumbbell", sets: 3, target: "3/side", rest: 90, science: "Integrates thoracic mobility, hip stability, and overhead shoulder packing across planes." },
+      { id: "f3", name: "Turkish Get-Up (Controlled)", muscle: "Full Body", type: "Functional", mode: "reps", equip: "Kettlebell / Dumbbell", sets: 3, target: "3/side", rest: 90, science: "Integrates thoracic mobility, hip stability, and overhead shoulder packing." },
       { id: "f4", name: "Single-Arm Suitcase Carry", muscle: "Core", type: "Functional", mode: "time", equip: "Dumbbell / Kettlebell", sets: 3, target: "40s/side", rest: 60, science: "Anti-lateral flexion challenge targeting quadratus lumborum and obliques." },
       { id: "f5", name: "Cable Pallof Press + Hold", muscle: "Core", type: "Functional", mode: "reps", equip: "Cable Stack", sets: 3, target: "10/side", rest: 60, science: "Resists transverse-plane spinal rotation under progressive cable load." },
       { id: "f6", name: "Hanging Knee / Leg Raises", muscle: "Core", type: "Hypertrophy", mode: "reps", equip: "Pull-Up Bar", sets: 3, target: "10-15", rest: 60, science: "Posterior pelvic tilt at top maximizes lower rectus abdominis activation." },
       { id: "f7", name: "Ab-Wheel / Barbell Rollouts", muscle: "Core", type: "Functional", mode: "reps", equip: "Ab Wheel / Barbell", sets: 3, target: "8-12", rest: 75, science: "High anti-extension core torque across lengthened abdominal musculature." },
       { id: "f8", name: "Weighted RKC Plank Hold", muscle: "Core", type: "Isometric", mode: "time", equip: "Mat / Plate", sets: 3, target: "40s", rest: 60, science: "Maximal glute and abdominal co-contraction doubles EMG activity vs standard planks." },
-      { id: "f9", name: "Copenhagen Adductor Plank", muscle: "Core", type: "Isometric", mode: "time", equip: "Flat Bench", sets: 3, target: "30s/side", rest: 60, science: "Proven in sports medicine research to build groin strength and prevent adductor strains." },
+      { id: "f9", name: "Copenhagen Adductor Plank", muscle: "Core", type: "Isometric", mode: "time", equip: "Flat Bench", sets: 3, target: "30s/side", rest: 60, science: "Builds groin strength and prevents adductor strains." },
       { id: "f10", name: "Hollow Body Isometric Hold", muscle: "Core", type: "Isometric", mode: "time", equip: "Floor Mat", sets: 3, target: "35s", rest: 45, science: "Trains anterior core bracing and lumbar pelvic control." },
 
-      // MOBILITY & FLEXIBILITY
       { id: "m1", name: "World's Greatest Stretch Flow", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Bodyweight / Mat", sets: 2, target: "45s/side", rest: 30, science: "Simultaneously mobilizes hip flexors, hamstrings, thoracic rotation, and ankles." },
-      { id: "m2", name: "90/90 Hip Internal/External Rotation", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Floor Mat", sets: 2, target: "45s/side", rest: 30, science: "Restores hip capsule rotational range essential for pain-free squats and deadlifts." },
+      { id: "m2", name: "90/90 Hip Internal/External Rotation", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Floor Mat", sets: 2, target: "45s/side", rest: 30, science: "Restores hip capsule rotational range for pain-free squats and deadlifts." },
       { id: "m3", name: "Thoracic Bench Extension + Lat Stretch", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Bench + PVC / Stick", sets: 2, target: "45s", rest: 30, science: "Counteracts desk posture kyphosis and improves overhead pressing mechanics." },
-      { id: "m4", name: "Deep Squat Ankle Dorsiflexion Pry", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Kettlebell / Rack", sets: 2, target: "45s", rest: 30, science: "Increases soleus compliance and ankle dorsiflexion for upright squat depth." },
-      { id: "m5", name: "Couch Stretch (Hip Flexor / Quad)", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Bench + Mat", sets: 2, target: "45s/side", rest: 30, science: "Lengthens rectus femoris and iliopsoas to relieve anterior pelvic tilt." },
-      { id: "m6", name: "Banded Shoulder Dislocates & Wall Slides", muscle: "Mobility", type: "Mobility", mode: "reps", equip: "Light Band / Wall", sets: 2, target: "12", rest: 30, science: "Activates serratus anterior and upward scapular rotation before upper-body sessions." }
+      { id: "m4", name: "Deep Squat Ankle Dorsiflexion Pry", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Kettlebell / Rack", sets: 2, target: "45s", rest: 30, science: "Increases soleus compliance and ankle dorsiflexion." },
+      { id: "m5", name: "Couch Stretch (Hip Flexor / Quad)", muscle: "Mobility", type: "Mobility", mode: "time", equip: "Bench + Mat", sets: 2, target: "45s/side", rest: 30, science: "Lengthens rectus femoris and iliopsoas." },
+      { id: "m6", name: "Banded Shoulder Dislocates & Wall Slides", muscle: "Mobility", type: "Mobility", mode: "reps", equip: "Light Band / Wall", sets: 2, target: "12", rest: 30, science: "Activates serratus anterior and upward scapular rotation." }
     ];
 
-    // Default Weekly Templates
     const SPLIT_TEMPLATES = {
       4: [
         { title: "Upper Body Compound Strength", focus: "Bench Press • Weighted Pull-Ups • OHP • Core", ids: ["m6", "c1", "b1", "s1", "b4", "c2", "s3", "f8"] },
@@ -574,44 +543,41 @@
       ]
     };
 
-    // App State
     let state = {
       unit: "lbs",
       splitDays: 4,
       schedules: { 4: null, 5: null },
       customExercises: [],
-      logs: {},          // { exerciseId: { lastSets: [{w, r}], bestWeight: number, bestReps: number, updatedAt: string } }
-      history: [],       // [{ id, date, dayTitle, totalVolume, setsCount }]
+      logs: {},
+      history: [],
       lastExported: null
     };
 
     let EXERCISE_DB = [...FALLBACK_EXERCISES];
     let activeDayIndex = 0;
-    let currentSessionSets = {}; // { exerciseId: [{w, r, done}] }
+    let currentSessionSets = {};
     let libFilter = "All";
     let pendingImportData = null;
 
-    // Timer State
     let timerSeconds = 90;
     let timerDefault = 90;
     let timerInterval = null;
     let timerRunning = false;
 
-    // Initialize App
-    async function initApp() {
+    function initApp() {
       loadState();
-      await loadExternalExercisesJSON();
       ensureSchedulesInitialized();
-      registerServiceWorker();
       updateHeaderUI();
       renderPlanView();
       renderLibrary();
       renderProgressView();
+      registerServiceWorker();
+      loadExternalExercisesJSON();
     }
 
-    // Load exercises.json if hosted alongside index.html
     async function loadExternalExercisesJSON() {
       const statusEl = document.getElementById("dbStatusText");
+      statusEl.textContent = `${getAllExercises().length} Fit4Less movements ready`;
       try {
         const res = await fetch("./exercises.json", { cache: "no-cache" });
         if (res.ok) {
@@ -621,14 +587,13 @@
             FALLBACK_EXERCISES.forEach(ex => map.set(ex.id, ex));
             externalList.forEach(ex => { if (ex.id && ex.name) map.set(ex.id, ex); });
             EXERCISE_DB = Array.from(map.values());
-            statusEl.textContent = `${EXERCISE_DB.length + state.customExercises.length} exercises synced from exercises.json`;
-            return;
+            statusEl.textContent = `${getAllExercises().length} exercises synced from exercises.json`;
+            updateHeaderUI();
+            renderPlanView();
+            renderLibrary();
           }
         }
-      } catch (e) {
-        // Fallback silently when running standalone
-      }
-      statusEl.textContent = `${EXERCISE_DB.length + state.customExercises.length} Fit4Less movements ready`;
+      } catch (e) {}
     }
 
     function getAllExercises() {
@@ -644,11 +609,11 @@
         const saved = localStorage.getItem("fit4less_iron_science_v2");
         if (saved) {
           const parsed = JSON.parse(saved);
-          state = { ...state, ...parsed };
+          if (parsed && typeof parsed === "object") {
+            state = { ...state, ...parsed };
+          }
         }
-      } catch (e) {
-        console.error("Failed to load local state", e);
-      }
+      } catch (e) {}
     }
 
     function saveState() {
@@ -663,14 +628,18 @@
             dot.classList.add("bg-emerald-400");
           }, 400);
         }
-      } catch (e) {
-        console.error("Failed to save local state", e);
-      }
+      } catch (e) {}
     }
 
     function ensureSchedulesInitialized() {
+      if (!state.schedules || typeof state.schedules !== "object") {
+        state.schedules = { 4: null, 5: null };
+      }
+      if (![4, 5].includes(Number(state.splitDays))) {
+        state.splitDays = 4;
+      }
       [4, 5].forEach(days => {
-        if (!state.schedules[days] || state.schedules[days].length !== days) {
+        if (!Array.isArray(state.schedules[days]) || state.schedules[days].length !== days) {
           state.schedules[days] = JSON.parse(JSON.stringify(SPLIT_TEMPLATES[days]));
         }
       });
@@ -690,7 +659,6 @@
       setTimeout(() => t.classList.add("hidden"), 2400);
     }
 
-    // Navigation
     function switchTab(tab) {
       ["plan", "workout", "library", "progress"].forEach(v => {
         document.getElementById(`view-${v}`).classList.add("hidden");
@@ -727,19 +695,19 @@
 
     function setSplitDays(days) {
       state.splitDays = days;
-      saveState();
+      ensureSchedulesInitialized();
       renderPlanView();
     }
 
-    // Render Dashboard & Schedule
     function renderPlanView() {
+      ensureSchedulesInitialized();
       const is4 = state.splitDays === 4;
       document.getElementById("split4Btn").className = `px-3 py-1 rounded-full text-xs font-bold transition ${is4 ? "bg-amber-500 text-slate-950" : "text-slate-400 hover:text-white"}`;
       document.getElementById("split5Btn").className = `px-3 py-1 rounded-full text-xs font-bold transition ${!is4 ? "bg-amber-500 text-slate-950" : "text-slate-400 hover:text-white"}`;
 
-      const totalVol = state.history.reduce((sum, h) => sum + (h.totalVolume || 0), 0);
+      const totalVol = (state.history || []).reduce((sum, h) => sum + (h.totalVolume || 0), 0);
       document.getElementById("dashTotalVolume").textContent = totalVol.toLocaleString();
-      document.getElementById("dashSessionsDone").textContent = state.history.length;
+      document.getElementById("dashSessionsDone").textContent = (state.history || []).length;
       document.getElementById("dashDbCount").textContent = getAllExercises().length;
 
       const schedule = state.schedules[state.splitDays];
@@ -759,7 +727,7 @@
         const card = document.createElement("div");
         card.className = "card-surface rounded-3xl p-4 flex items-center justify-between gap-3 transition hover:border-white/15";
         card.innerHTML = `
-          <div class="flex items-center gap-3.5 min-w-0 flex-1" onclick="startSession(${idx})">
+          <div class="flex items-center gap-3.5 min-w-0 flex-1 cursor-pointer" onclick="startSession(${idx})">
             <div class="w-12 h-12 rounded-2xl bg-gradient-to-br ${badgeColors[idx % badgeColors.length]} border flex flex-col items-center justify-center shrink-0">
               <span class="text-[9px] font-bold uppercase opacity-80">Day</span>
               <span class="text-base font-extrabold leading-none">${idx + 1}</span>
@@ -776,10 +744,10 @@
           </div>
 
           <div class="flex items-center gap-2 shrink-0">
-            <button onclick="rotateDayExercises(${idx})" title="Rotate fresh variations" class="w-9 h-9 rounded-full card-elevated flex items-center justify-center text-slate-300 hover:text-amber-400 active:scale-90 transition">
+            <button type="button" onclick="rotateDayExercises(${idx})" title="Rotate fresh variations" class="w-9 h-9 rounded-full card-elevated flex items-center justify-center text-slate-300 hover:text-amber-400 active:scale-90 transition">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             </button>
-            <button onclick="startSession(${idx})" title="Start Session" class="w-10 h-10 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/20 active:scale-90 transition">
+            <button type="button" onclick="startSession(${idx})" title="Start Session" class="w-10 h-10 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/20 active:scale-90 transition">
               <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
           </div>
@@ -788,7 +756,6 @@
       });
     }
 
-    // Rotate exercises within same muscle/type categories so workouts never feel stale
     function rotateDayExercises(dayIdx) {
       const schedule = state.schedules[state.splitDays];
       const day = schedule[dayIdx];
@@ -814,7 +781,6 @@
       showToast(`Day ${dayIdx + 1} rotated with fresh movements`);
     }
 
-    // Start Workout Session
     function startSession(dayIdx) {
       activeDayIndex = dayIdx;
       const day = state.schedules[state.splitDays][dayIdx];
@@ -890,7 +856,7 @@
                   class="w-full py-2 px-2 rounded-xl bg-[#0d0e12] border border-white/10 text-center text-sm font-bold text-white focus:outline-none focus:border-amber-500" />
               </div>
               <div class="col-span-2 flex justify-center">
-                <button onclick="toggleSetDone('${id}', ${sIdx}, ${ex.rest || 90}, '${ex.mode}', '${ex.target}')"
+                <button type="button" onclick="toggleSetDone('${id}', ${sIdx}, ${ex.rest || 90}, '${ex.mode}', '${ex.target}')"
                   class="w-9 h-9 rounded-xl flex items-center justify-center font-bold transition ${setRow.done ? "bg-emerald-500 text-slate-950" : "card-elevated text-slate-400 hover:text-white"}">
                   ✓
                 </button>
@@ -909,10 +875,10 @@
               <h3 class="text-sm font-extrabold text-white mt-1">${ex.name}</h3>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
-              <button onclick="openTimerModal(${ex.mode === "time" ? parseInt(ex.target) || 40 : ex.rest || 90}, '${ex.name.replace(/'/g, "")}')" class="px-2.5 py-1 rounded-xl card-elevated text-[10px] font-bold text-amber-400">
+              <button type="button" onclick="openTimerModal(${ex.mode === "time" ? parseInt(ex.target) || 40 : ex.rest || 90}, '${ex.name.replace(/'/g, "")}')" class="px-2.5 py-1 rounded-xl card-elevated text-[10px] font-bold text-amber-400">
                 ⏱ ${ex.mode === "time" ? ex.target : (ex.rest || 90) + "s"}
               </button>
-              <button onclick="removeExerciseFromDay(${exIndex})" title="Remove from today" class="w-7 h-7 rounded-xl card-elevated text-xs text-slate-400 hover:text-rose-400">✕</button>
+              <button type="button" onclick="removeExerciseFromDay(${exIndex})" title="Remove from today" class="w-7 h-7 rounded-xl card-elevated text-xs text-slate-400 hover:text-rose-400">✕</button>
             </div>
           </div>
 
@@ -935,8 +901,8 @@
           <div class="space-y-2">${setsHtml}</div>
 
           <div class="flex items-center justify-between pt-1">
-            <button onclick="addSetRow('${id}')" class="text-xs font-bold text-amber-400 hover:underline">+ Add Set</button>
-            ${currentSessionSets[id].length > 1 ? `<button onclick="removeSetRow('${id}')" class="text-xs font-semibold text-slate-500 hover:text-slate-300">- Remove Set</button>` : ""}
+            <button type="button" onclick="addSetRow('${id}')" class="text-xs font-bold text-amber-400 hover:underline">+ Add Set</button>
+            ${currentSessionSets[id].length > 1 ? `<button type="button" onclick="removeSetRow('${id}')" class="text-xs font-semibold text-slate-500 hover:text-slate-300">- Remove Set</button>` : ""}
           </div>
         `;
         container.appendChild(card);
@@ -952,7 +918,6 @@
       row.done = !row.done;
 
       if (row.done) {
-        // Persist progression immediately
         const completed = currentSessionSets[exId].filter(s => s.done && (s.r !== "" || s.w !== ""));
         if (completed.length > 0) {
           const prevBestW = state.logs[exId]?.bestWeight || 0;
@@ -1030,7 +995,6 @@
       switchTab("progress");
     }
 
-    // Quick Add Exercise Modal
     function openQuickAddToDayModal() {
       document.getElementById("quickAddModal").classList.remove("hidden");
       renderQuickAddList();
@@ -1066,7 +1030,6 @@
       showToast("Added to today's workout");
     }
 
-    // Library & Custom Exercise Creation
     function toggleAddExerciseForm() {
       document.getElementById("customExerciseForm").classList.toggle("hidden");
     }
@@ -1138,7 +1101,7 @@
               </div>
               <h4 class="text-sm font-bold text-white mt-1">${ex.name}</h4>
             </div>
-            <button onclick="quickInjectToDay1('${ex.id}')" class="px-2.5 py-1.5 rounded-xl card-elevated text-[10px] font-bold text-slate-200 hover:text-amber-400 shrink-0">
+            <button type="button" onclick="quickInjectToDay1('${ex.id}')" class="px-2.5 py-1.5 rounded-xl card-elevated text-[10px] font-bold text-slate-200 hover:text-amber-400 shrink-0">
               + Day ${activeDayIndex + 1}
             </button>
           </div>
@@ -1153,7 +1116,6 @@
       showToast(`Added to Day ${activeDayIndex + 1}`);
     }
 
-    // Progress & Radial Gauge View
     function renderProgressView() {
       const targetWeekly = state.splitDays;
       const doneCount = Math.min(targetWeekly, state.history.length);
@@ -1170,7 +1132,6 @@
       document.getElementById("statTotalSets").textContent = totalSets;
       document.getElementById("statPrCount").textContent = trackedIds.length;
 
-      // Muscle distribution bars
       let push = 0, pull = 0, legsCore = 0;
       trackedIds.forEach(id => {
         const ex = getExerciseById(id);
@@ -1191,7 +1152,6 @@
         document.getElementById("backupLastExportText").textContent = `Last exported: ${state.lastExported}`;
       }
 
-      // PRs List
       const prContainer = document.getElementById("prListContainer");
       if (trackedIds.length === 0) {
         prContainer.innerHTML = `<div class="card-surface rounded-2xl p-4 text-xs text-slate-400">Complete sets in any workout to see your personal records and progression here.</div>`;
@@ -1215,7 +1175,6 @@
         }).join("");
       }
 
-      // History List
       const histContainer = document.getElementById("historyListContainer");
       if (state.history.length === 0) {
         histContainer.innerHTML = `<div class="card-surface rounded-2xl p-4 text-xs text-slate-400">No completed sessions yet. Tap Play on Day 1 to start!</div>`;
@@ -1232,7 +1191,6 @@
       }
     }
 
-    // Timer Logic
     function openTimerModal(seconds, title) {
       timerDefault = seconds;
       timerSeconds = seconds;
@@ -1304,7 +1262,6 @@
       } catch (e) {}
     }
 
-    // One-Tap JSON Export & Import
     function openBackupModal() {
       document.getElementById("importPreviewBox").classList.add("hidden");
       document.getElementById("modalBackupMeta").innerHTML = `
@@ -1402,7 +1359,11 @@
       showToast("Workout progress restored!");
     }
 
-    initApp();
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
   </script>
 </body>
 </html>
