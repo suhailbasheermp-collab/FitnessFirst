@@ -1,0 +1,1942 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Fit4Less • Iron & Science Workout Tracker</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Tone.js for subtle WebAudio timer chimes (no external MP3 URLs) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            obsidian: '#0b1120',
+            slatecard: '#111827',
+            slateborder: '#1f2937',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0b1120;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b1120;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col pb-24 selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- TOP HEADER -->
+  <header class="sticky top-0 z-30 glass-panel border-b border-slate-800 px-4 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-slate-950 font-extrabold shadow-lg shadow-emerald-500/20">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h2m14 0h2M5 7v6m14-6v6M7 10h10M7 6v8m10-8v8" />
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white leading-none">IRON & SCIENCE</h1>
+            <span class="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30">Fit4Less</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-0.5">45–60m Evidence-Based Hypertrophy, Strength & Mobility</p>
+        </div>
+      </div>
+
+      <!-- Global Controls: Unit Toggle & Quick Timer Trigger -->
+      <div class="flex items-center gap-2">
+        <button onclick="openBackupModal()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-sky-400 flex items-center gap-1.5 transition" title="Backup & Restore JSON Data">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          <span class="hidden sm:inline">Backup</span>
+        </button>
+        <button id="unitToggleBtn" onclick="toggleWeightUnit()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-mono font-bold text-emerald-400 transition">
+          LBS
+        </button>
+        <button onclick="openTimerModal(90, 'Rest Timer')" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition relative" title="Open Rest / Interval Timer">
+          <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="13" r="8"></circle>
+            <path d="M12 9v4l2 2M5 3L2 6m20 0l-3-3M10 2h4"></path>
+          </svg>
+          <span id="headerTimerBadge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- STICKY MINI TIMER BAR (Appears whenever a rest or isometric timer is running) -->
+  <div id="stickyTimerBar" class="hidden sticky top-[61px] z-20 bg-slate-900/95 border-b border-emerald-500/40 px-4 py-2 shadow-lg">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span id="stickyTimerMode" class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">REST</span>
+        <span id="stickyTimerLabel" class="text-xs text-slate-300 truncate max-w-[140px] sm:max-w-xs">Recovery</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="stickyTimerClock" class="font-mono text-lg font-bold text-white">01:30</span>
+        <button onclick="toggleTimerPause()" id="stickyPauseBtn" class="px-2.5 py-1 rounded bg-slate-800 text-xs font-semibold text-amber-300 border border-slate-700">Pause</button>
+        <button onclick="stopTimer()" class="px-2.5 py-1 rounded bg-rose-500/20 text-xs font-semibold text-rose-300 border border-rose-500/30">Stop</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION BANNER -->
+  <div id="toastContainer" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col gap-2 w-[92%] max-w-md"></div>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 pt-4">
+
+    <!-- ==================== TAB 1: WEEKLY SCHEDULE ==================== -->
+    <section id="tab-schedule" class="space-y-4">
+      <!-- Split Selector & Overview Card -->
+      <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-4 shadow-xl">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-lg font-bold text-white">Weekly Training Blueprint</h2>
+            <p class="text-xs text-slate-400">Tailored for Fit4Less equipment • 45–60 min structured sessions</p>
+          </div>
+          <!-- 4-Day / 5-Day Toggle -->
+          <div class="inline-flex p-1 rounded-xl bg-slate-950 border border-slate-800 self-start sm:self-auto">
+            <button id="splitBtn4" onclick="setSplitDays(4)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+              4-Day Split
+            </button>
+            <button id="splitBtn5" onclick="setSplitDays(5)" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition">
+              5-Day Split
+            </button>
+          </div>
+        </div>
+
+        <!-- Split Science Summary -->
+        <div id="splitDescriptionBox" class="mt-3 pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-300">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Daily Session Cards List -->
+      <div id="weeklyDaysList" class="space-y-4">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: ACTIVE WORKOUT LOGGER ==================== -->
+    <section id="tab-workout" class="hidden space-y-4">
+      <!-- Active Session Header -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-xl">
+        <div class="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="activeDayBadge" class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400">DAY 1</span>
+              <span class="text-xs text-slate-400 font-mono" id="activeDurationBadge">~52 MIN</span>
+            </div>
+            <h2 id="activeSessionTitle" class="text-xl font-extrabold text-white mt-1">Upper Body Compound & Push</h2>
+            <p id="activeSessionFocus" class="text-xs text-slate-400 mt-0.5">Bench Press • Overhead Strength • Thoracic Mobility</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="rotateSingleDay(state.activeDayIndex, true)" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-amber-300 flex items-center gap-1.5 transition" title="Generate fresh exercises for today while keeping muscle balance">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Rotate Session
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Day Switcher Pills -->
+        <div id="activeDayPills" class="flex gap-1.5 overflow-x-auto pb-1 mt-3 pt-3 border-t border-slate-800">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Structured Workout Blocks -->
+      <div id="activeWorkoutBlocks" class="space-y-4">
+        <!-- Populated dynamically -->
+      </div>
+
+      <!-- Complete & Save Workout Action -->
+      <div class="bg-gradient-to-r from-emerald-950/80 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div>
+          <h3 class="text-sm font-bold text-white">Ready to lock in today's progression?</h3>
+          <p class="text-xs text-slate-400">Saves all logged sets, reps/holds, and weights to your progression memory.</p>
+        </div>
+        <button onclick="finishAndSaveWorkout()" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-emerald-500/20 transition">
+          Complete & Save Workout
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: EXERCISE DATABASE & CUSTOM CREATOR ==================== -->
+    <section id="tab-library" class="hidden space-y-4">
+      <!-- Top Action Bar: Add Custom Exercise Toggle -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-lg font-bold text-white">Exercise Library (<span id="dbTotalCount">0</span>)</h2>
+          <p class="text-xs text-slate-400">Compounds, Hypertrophy, Functional Patterns, Isometrics & Mobility</p>
+        </div>
+        <button onclick="toggleCustomForm()" id="toggleCustomFormBtn" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-emerald-500/15 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          Add Custom Workout
+        </button>
+      </div>
+
+      <!-- CUSTOM EXERCISE CREATOR FORM (Collapsible) -->
+      <div id="customExerciseFormCard" class="hidden bg-slate-900 border-2 border-emerald-500/40 rounded-2xl p-4 sm:p-5 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div>
+            <h3 class="text-base font-extrabold text-emerald-400">Create Custom Exercise</h3>
+            <p class="text-xs text-slate-400">Adds directly to your database & auto-schedules into future rotations</p>
+          </div>
+          <button onclick="toggleCustomForm()" class="text-slate-400 hover:text-white p-1">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <form id="customExerciseForm" onsubmit="handleCreateCustomExercise(event)" class="space-y-3.5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Exercise Name *</label>
+              <input type="text" id="custName" required placeholder="e.g., Fit4Less Smith Machine Incline Press" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Muscle Group Category *</label>
+              <select id="custMuscle" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500">
+                <option value="Chest">Chest</option>
+                <option value="Back">Back</option>
+                <option value="Shoulders">Shoulders</option>
+                <option value="Legs">Legs</option>
+                <option value="Arms">Arms</option>
+                <option value="Core">Core</option>
+                <option value="Full Body">Full Body</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Workout Type *</label>
+              <select id="custType" onchange="autoSuggestTrackingMode()" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500">
+                <option value="Compound Strength">Compound Strength</option>
+                <option value="Hypertrophy / Accessory">Hypertrophy / Accessory</option>
+                <option value="Functional Pattern">Functional Pattern</option>
+                <option value="Isometric / Interval">Isometric / Interval</option>
+                <option value="Mobility / Flexibility">Mobility / Flexibility</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Tracking Mode *</label>
+              <select id="custTracking" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500">
+                <option value="reps">Weight + Reps</option>
+                <option value="time">Interval / Time (Seconds)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">Fit4Less Equipment</label>
+              <input type="text" id="custEquipment" placeholder="e.g., Cables, Dumbbells, Barbell" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Execution Cues & Research Notes</label>
+            <input type="text" id="custNotes" placeholder="e.g., Control 3s eccentric, pause at stretch for peak mechanical tension." class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500" />
+          </div>
+
+          <div class="flex items-center justify-between pt-2">
+            <label class="inline-flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
+              <input type="checkbox" id="custInjectNow" checked class="rounded bg-slate-950 border-slate-700 text-emerald-500 focus:ring-emerald-500">
+              <span>Also add immediately to today's active workout</span>
+            </label>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs transition">
+              Save to Database
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Search & Filter Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 space-y-3">
+        <input type="text" id="libSearchInput" oninput="renderExerciseLibrary()" placeholder="Search 65+ exercises (e.g., Deadlift, Isometric, Pull-Up, Kettlebell, Mobility)..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500" />
+
+        <!-- Muscle Filter Pills -->
+        <div class="flex gap-1.5 overflow-x-auto pb-1" id="libMuscleFilters">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Workout Type Filter Pills -->
+        <div class="flex gap-1.5 overflow-x-auto pb-1" id="libTypeFilters">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Exercise Cards Grid -->
+      <div id="exerciseLibraryGrid" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- Populated dynamically -->
+      </div>
+    </section>
+
+    <!-- ==================== TAB 4: PROGRESSION & HISTORY ==================== -->
+    <section id="tab-history" class="hidden space-y-4">
+      <!-- Stats Overview -->
+      <div class="grid grid-cols-3 gap-2.5">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 text-center">
+          <div id="statTotalWorkouts" class="text-xl sm:text-2xl font-extrabold text-emerald-400 font-mono">0</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">Sessions Logged</div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 text-center">
+          <div id="statTrackedExercises" class="text-xl sm:text-2xl font-extrabold text-amber-400 font-mono">0</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">Lifts Tracked</div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 text-center">
+          <div id="statTotalVolume" class="text-xl sm:text-2xl font-extrabold text-sky-400 font-mono">0k</div>
+          <div class="text-[11px] text-slate-400 mt-0.5">Volume (<span class="unit-label">lbs</span>)</div>
+        </div>
+      </div>
+
+      <!-- Exercise Progression Lookup -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-base font-bold text-white">Lift & Isometric Progression Lookup</h3>
+            <p class="text-xs text-slate-400">Select any exercise to inspect your PRs & session-by-session progression</p>
+          </div>
+        </div>
+        <select id="progressionExerciseSelect" onchange="renderExerciseProgressionDetail()" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-white focus:outline-none focus:border-emerald-500">
+          <!-- Populated dynamically -->
+        </select>
+        <div id="progressionDetailBox" class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-3.5 text-xs text-slate-300">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- Recent Completed Workouts Log -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+        <!-- Dedicated One-Tap Backup & Restore Card -->
+        <div class="bg-slate-950/90 border border-sky-500/30 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-sky-400">One-Tap JSON Backup & Restore</h4>
+            </div>
+            <p id="backupStatusInline" class="text-[11px] text-slate-400 mt-1 font-mono">Auto-saved locally • Never exported</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button onclick="exportBackupJSON()" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs flex items-center gap-1.5 shadow-md shadow-emerald-500/15 transition">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export JSON
+            </button>
+            <label class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 flex items-center gap-1.5 cursor-pointer transition">
+              <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+              Import JSON
+              <input type="file" accept=".json,application/json" onchange="handleImportFileSelect(event)" class="hidden" />
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <h3 class="text-base font-bold text-white">Completed Session History</h3>
+        </div>
+        <div id="workoutHistoryList" class="space-y-2.5">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== BOTTOM MOBILE-FIRST NAVIGATION BAR ==================== -->
+  <nav class="fixed bottom-0 inset-x-0 z-30 glass-panel border-t border-slate-800 px-2 py-1.5">
+    <div class="max-w-4xl mx-auto grid grid-cols-4 gap-1">
+      <button onclick="switchTab('schedule')" id="nav-schedule" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-emerald-400 bg-emerald-500/10">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span class="text-[10px] font-bold mt-0.5">Weekly Plan</span>
+      </button>
+
+      <button onclick="switchTab('workout')" id="nav-workout" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 hover:text-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        <span class="text-[10px] font-bold mt-0.5">Active Session</span>
+      </button>
+
+      <button onclick="switchTab('library')" id="nav-library" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 hover:text-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        </svg>
+        <span class="text-[10px] font-bold mt-0.5">Library & Add</span>
+      </button>
+
+      <button onclick="switchTab('history')" id="nav-history" class="nav-btn flex flex-col items-center justify-center py-1.5 rounded-xl text-slate-400 hover:text-slate-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        <span class="text-[10px] font-bold mt-0.5">Progression</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ==================== MODAL: EXERCISE SWAPPER ==================== -->
+  <div id="swapModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-lg rounded-t-3xl sm:rounded-2xl p-5 max-h-[85vh] flex flex-col shadow-2xl">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="text-base font-extrabold text-white">Swap Exercise</h3>
+          <p id="swapModalSubtitle" class="text-xs text-slate-400">Choose an alternative from your database</p>
+        </div>
+        <button onclick="closeSwapModal()" class="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <input type="text" id="swapSearchInput" oninput="renderSwapOptions()" placeholder="Filter alternatives..." class="mt-3 w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-sm text-white focus:outline-none focus:border-emerald-500" />
+      <div id="swapOptionsList" class="mt-3 overflow-y-auto space-y-2 flex-1 pr-1">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: REST & ISOMETRIC INTERVAL TIMER ==================== -->
+  <div id="timerModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-sm rounded-3xl p-6 text-center shadow-2xl space-y-5">
+      <div class="flex items-center justify-between">
+        <span id="modalTimerBadge" class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300">REST / INTERVAL</span>
+        <button onclick="closeTimerModal()" class="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div>
+        <h3 id="modalTimerTitle" class="text-base font-bold text-slate-200">Rest Period</h3>
+        <div id="modalTimerDisplay" class="font-mono text-6xl font-extrabold text-white my-3 tracking-tight">01:30</div>
+        <p id="modalTimerSub" class="text-xs text-slate-400">Optimal ATP-PCr recovery for compound strength</p>
+      </div>
+
+      <!-- Preset Quick Buttons -->
+      <div class="grid grid-cols-4 gap-2">
+        <button onclick="startTimer(30, 'Isometric Hold (30s)', 'ISOMETRIC')" class="py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono font-bold text-amber-300 border border-slate-700">30s</button>
+        <button onclick="startTimer(45, 'Isometric Hold (45s)', 'ISOMETRIC')" class="py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono font-bold text-amber-300 border border-slate-700">45s</button>
+        <button onclick="startTimer(90, 'Hypertrophy Rest (90s)', 'REST')" class="py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono font-bold text-emerald-300 border border-slate-700">90s</button>
+        <button onclick="startTimer(150, 'Compound Rest (2.5m)', 'REST')" class="py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-mono font-bold text-emerald-300 border border-slate-700">150s</button>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="toggleTimerPause()" id="modalPauseBtn" class="flex-1 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition">
+          Pause
+        </button>
+        <button onclick="stopTimer(); closeTimerModal();" class="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-sm border border-slate-700">
+          Reset
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL: ONE-TAP JSON BACKUP & RESTORE ==================== -->
+  <div id="backupModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-slate-900 border border-slate-700 w-full max-w-md rounded-t-3xl sm:rounded-2xl p-5 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div>
+          <h3 class="text-base font-extrabold text-white">Backup & Restore Data</h3>
+          <p class="text-xs text-slate-400">Save or transfer your Fit4Less progress via JSON</p>
+        </div>
+        <button onclick="closeBackupModal()" class="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Live Status Banner -->
+      <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 space-y-1 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">Browser Auto-Save:</span>
+          <span id="modalLastSavedText" class="font-mono text-emerald-400 font-semibold">Active</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">Last JSON Export:</span>
+          <span id="modalLastExportedText" class="font-mono text-sky-400 font-semibold">Never</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-400">Current Data Summary:</span>
+          <span id="modalDataSummaryText" class="font-mono text-slate-200">0 logs • 0 custom</span>
+        </div>
+      </div>
+
+      <!-- Primary One-Tap Export & Import Buttons -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <button onclick="exportBackupJSON()" class="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          </svg>
+          Export JSON Backup
+        </button>
+        <label class="w-full py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-extrabold text-xs border border-slate-700 flex items-center justify-center gap-2 cursor-pointer transition">
+          <svg class="w-4 h-4 text-sky-400" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+          </svg>
+          Import JSON Backup
+          <input type="file" accept=".json,application/json" onchange="handleImportFileSelect(event)" class="hidden" />
+        </label>
+      </div>
+
+      <!-- Pre-Restore Confirmation Panel (Shown when a valid JSON file is selected) -->
+      <div id="importConfirmPanel" class="hidden bg-amber-500/10 border border-amber-500/40 rounded-xl p-3.5 space-y-3">
+        <div>
+          <h4 class="text-xs font-extrabold uppercase tracking-wider text-amber-300">Confirm Backup Restore</h4>
+          <p id="importPreviewDetails" class="text-xs text-slate-200 mt-1 leading-relaxed"></p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <button onclick="applyPendingImport('overwrite')" class="flex-1 py-2.5 px-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs transition">
+            Overwrite & Restore
+          </button>
+          <button onclick="applyPendingImport('merge')" class="flex-1 py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 font-bold text-xs border border-slate-700 transition">
+            Merge With Current
+          </button>
+          <button onclick="cancelPendingImport()" class="py-2.5 px-3 rounded-xl bg-slate-950 text-slate-400 hover:text-white font-semibold text-xs border border-slate-800">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT APPLICATION LOGIC ==================== -->
+  <script>
+    /**
+     * ============================================================================
+     * 1. COMPREHENSIVE EVIDENCE-BASED EXERCISE DATABASE (66 Exercises)
+     * Tailored for Fit4Less equipment: Barbells, Smith Machines, Dumbbells,
+     * Cables, Pull-Up Bars, Kettlebells, Leg Press/Curl/Extension, Stretching Zone.
+     * ============================================================================
+     */
+    const DEFAULT_EXERCISES = [
+      // --- CHEST (Compounds & Hypertrophy) ---
+      { id: 'ex_bench_flat', name: 'Barbell Flat Bench Press', muscle: 'Chest', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell & Bench', defaultSets: 3, defaultTarget: '6-8', restSec: 150, notes: 'High mechanical tension across sternal pecs; retract scapulae and drive feet into floor.' },
+      { id: 'ex_bench_incline_db', name: 'Incline Dumbbell Bench Press (30°)', muscle: 'Chest', type: 'Compound Strength', tracking: 'reps', equipment: 'Dumbbells & Incline Bench', defaultSets: 3, defaultTarget: '8-10', restSec: 120, notes: '30° angle maximizes clavicular (upper) pec activation with deep stretched-position ROM.' },
+      { id: 'ex_bench_close', name: 'Close-Grip Barbell Bench Press', muscle: 'Chest', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell & Bench', defaultSets: 3, defaultTarget: '6-10', restSec: 120, notes: 'Overloads triceps lockout and inner/upper chest simultaneously.' },
+      { id: 'ex_smith_incline', name: 'Smith Machine Incline Press', muscle: 'Chest', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Smith Machine', defaultSets: 3, defaultTarget: '8-12', restSec: 90, notes: 'Fixed bar path removes stability bottleneck, allowing safe proximity to muscular failure.' },
+      { id: 'ex_cable_fly', name: 'Seated Cable Chest Flyes', muscle: 'Chest', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Dual Cable Station', defaultSets: 3, defaultTarget: '12-15', restSec: 75, notes: 'Constant tension in the lengthened/stretched position drives superior sarcoplasmic & myofibrillar hypertrophy.' },
+      { id: 'ex_pec_deck', name: 'Pec Deck Machine Flye', muscle: 'Chest', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Pec Deck Machine', defaultSets: 3, defaultTarget: '12-15', restSec: 75, notes: 'Pause 1 second in the deep stretch position; research shows long-length tension boosts pec growth.' },
+      { id: 'ex_dips_chest', name: 'Weighted / Assisted Chest Dips', muscle: 'Chest', type: 'Compound Strength', tracking: 'reps', equipment: 'Dip Station', defaultSets: 3, defaultTarget: '8-12', restSec: 120, notes: 'Slight forward torso lean shifts emphasis to lower costal pec fibers.' },
+
+      // --- BACK (Compounds, Pull-Up Variations & Hypertrophy) ---
+      { id: 'ex_deadlift_conv', name: 'Conventional Barbell Deadlift', muscle: 'Back', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell & Plates', defaultSets: 3, defaultTarget: '5-6', restSec: 180, notes: 'Gold-standard posterior chain & spinal erector strength builder. Brace 360° before pulling slack.' },
+      { id: 'ex_deadlift_trap', name: 'Trap / Hex Bar Deadlift', muscle: 'Back', type: 'Compound Strength', tracking: 'reps', equipment: 'Trap Bar / Dumbbells', defaultSets: 3, defaultTarget: '6-8', restSec: 150, notes: 'More upright torso reduces lumbar shear stress while maximizing concentric power output.' },
+      { id: 'ex_pullup_weighted', name: 'Weighted or Bodyweight Pronated Pull-Ups', muscle: 'Back', type: 'Compound Strength', tracking: 'reps', equipment: 'Pull-Up Bar / Dip Belt', defaultSets: 3, defaultTarget: '6-10', restSec: 120, notes: 'Full dead-hang start to chin-over-bar; unmatched vertical pulling stimulus for teres major & lats.' },
+      { id: 'ex_pullup_neutral', name: 'Neutral-Grip Pull-Ups', muscle: 'Back', type: 'Compound Strength', tracking: 'reps', equipment: 'Neutral Pull-Up Handles', defaultSets: 3, defaultTarget: '6-10', restSec: 120, notes: 'Shoulder-friendly grip that increases brachialis and lower-lat mechanical leverage.' },
+      { id: 'ex_chinup_supinated', name: 'Supinated Chin-Ups', muscle: 'Back', type: 'Compound Strength', tracking: 'reps', equipment: 'Pull-Up Bar', defaultSets: 3, defaultTarget: '6-10', restSec: 120, notes: 'High biceps brachii + latissimus dorsi co-activation through full shoulder extension.' },
+      { id: 'ex_row_barbell', name: 'Barbell Bent-Over Row (Pendlay/45°)', muscle: 'Back', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell', defaultSets: 3, defaultTarget: '6-10', restSec: 120, notes: 'Builds upper-back thickness (rhomboids, mid-traps) and isometric hip-hinge endurance.' },
+      { id: 'ex_row_chest_supp', name: 'Chest-Supported Dumbbell Row', muscle: 'Back', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Dumbbells & Incline Bench', defaultSets: 3, defaultTarget: '10-12', restSec: 90, notes: 'Eliminates lower-back fatigue so upper back muscles can be trained to true failure.' },
+      { id: 'ex_lat_pulldown', name: 'Wide-Grip Lat Pulldown', muscle: 'Back', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Cable Lat Pulldown', defaultSets: 3, defaultTarget: '10-12', restSec: 90, notes: 'Drive elbows down toward hips; control the eccentric upward stretch for 2-3 seconds.' },
+      { id: 'ex_row_single_db', name: 'Single-Arm Dumbbell Tripod Row', muscle: 'Back', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Dumbbell & Bench', defaultSets: 3, defaultTarget: '10-12', restSec: 75, notes: 'Allows slight thoracic rotation and deep protraction at the bottom for complete lat fiber recruitment.' },
+      { id: 'ex_straight_arm_pd', name: 'Cable Straight-Arm Lat Pulldown', muscle: 'Back', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'High Cable Rope/Bar', defaultSets: 3, defaultTarget: '12-15', restSec: 60, notes: 'Isolates shoulder extension without biceps fatigue; ideal pre-exhaust or finisher.' },
+      { id: 'ex_face_pulls', name: 'Cable Face Pulls with External Rotation', muscle: 'Back', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Cable Rope', defaultSets: 3, defaultTarget: '15-20', restSec: 60, notes: 'Strengthens infraspinatus, teres minor, and lower traps to Bulletproof shoulders against pressing.' },
+
+      // --- LEGS (Compounds & Hypertrophy) ---
+      { id: 'ex_squat_back', name: 'Barbell High-Bar Back Squat', muscle: 'Legs', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell & Squat Rack', defaultSets: 3, defaultTarget: '6-8', restSec: 180, notes: 'Full knee & hip flexion builds quad/glute mass and bone mineral density.' },
+      { id: 'ex_squat_front', name: 'Barbell Front Squat / Goblet Squat', muscle: 'Legs', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell or Heavy Kettlebell', defaultSets: 3, defaultTarget: '6-10', restSec: 150, notes: 'Upright torso maximizes knee extensor (quad) torque and thoracic extension strength.' },
+      { id: 'ex_rdl_barbell', name: 'Barbell Romanian Deadlift (RDL)', muscle: 'Legs', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell', defaultSets: 3, defaultTarget: '8-10', restSec: 150, notes: 'Unmatched hamstring & glute hypertrophy via high tension at long muscle lengths.' },
+      { id: 'ex_bulgarian_split', name: 'Dumbbell Bulgarian Split Squat', muscle: 'Legs', type: 'Compound Strength', tracking: 'reps', equipment: 'Dumbbells & Bench', defaultSets: 3, defaultTarget: '8-10', restSec: 90, notes: 'Unilateral stability + deep hip/knee stretch corrects left-right strength asymmetries.' },
+      { id: 'ex_leg_press', name: '45° Plate-Loaded Leg Press', muscle: 'Legs', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Leg Press Machine', defaultSets: 3, defaultTarget: '10-15', restSec: 120, notes: 'High-volume quad stimulus without axial spinal loading.' },
+      { id: 'ex_leg_curl_seated', name: 'Seated Hamstring Leg Curl', muscle: 'Legs', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Seated Leg Curl Machine', defaultSets: 3, defaultTarget: '10-15', restSec: 75, notes: 'Research shows seated curls outperform lying curls because flexed hips stretch biarticular hamstrings.' },
+      { id: 'ex_leg_extension', name: 'Machine Leg Extension (Long-Length Focus)', muscle: 'Legs', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Leg Extension Machine', defaultSets: 3, defaultTarget: '12-15', restSec: 75, notes: 'Only exercise that maximally trains rectus femoris in its shortened/lengthened arc.' },
+      { id: 'ex_calf_standing', name: 'Standing Calf Raise (2s Bottom Pause)', muscle: 'Legs', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Smith Machine / Calf Machine', defaultSets: 3, defaultTarget: '12-15', restSec: 60, notes: 'Straight knee targets gastrocnemius; 2s pause at bottom eliminates Achilles tendon bounce.' },
+
+      // --- SHOULDERS ---
+      { id: 'ex_ohp_barbell', name: 'Standing Overhead Barbell Press', muscle: 'Shoulders', type: 'Compound Strength', tracking: 'reps', equipment: 'Barbell', defaultSets: 3, defaultTarget: '6-8', restSec: 150, notes: 'Strict vertical press building anterior delts, serratus anterior, and full-body core bracing.' },
+      { id: 'ex_db_shoulder_press', name: 'Seated Dumbbell Overhead Press', muscle: 'Shoulders', type: 'Compound Strength', tracking: 'reps', equipment: 'Dumbbells & Bench', defaultSets: 3, defaultTarget: '8-10', restSec: 120, notes: 'Scapular plane path (30° forward) protects subacromial space while overloading deltoids.' },
+      { id: 'ex_lat_raise_cable', name: 'Cable Lateral Raise (Behind-Back)', muscle: 'Shoulders', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Low Cable Pulley', defaultSets: 3, defaultTarget: '12-15', restSec: 60, notes: 'Provides peak resistance in the stretched bottom position where lateral delts grow best.' },
+      { id: 'ex_lat_raise_db', name: 'Dumbbell Lean-Away Lateral Raise', muscle: 'Shoulders', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Dumbbells', defaultSets: 3, defaultTarget: '12-15', restSec: 60, notes: 'Lead with elbows; builds V-taper width with minimal trapezius takeover.' },
+      { id: 'ex_rear_delt_fly', name: 'Reverse Pec Deck / Rear Delt Cable Fly', muscle: 'Shoulders', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Pec Deck / Cables', defaultSets: 3, defaultTarget: '15-20', restSec: 60, notes: 'Directly targets posterior deltoid fibers often under-stimulated by rows alone.' },
+
+      // --- ARMS (Biceps & Triceps) ---
+      { id: 'ex_incline_db_curl', name: 'Incline Bench Dumbbell Bicep Curl', muscle: 'Arms', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Dumbbells & 45° Bench', defaultSets: 3, defaultTarget: '10-12', restSec: 60, notes: 'Shoulder extension places the long head of the biceps under maximal stretch tension.' },
+      { id: 'ex_hammer_curl', name: 'Cross-Body / Neutral Hammer Curls', muscle: 'Arms', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Dumbbells or Cable Rope', defaultSets: 3, defaultTarget: '10-12', restSec: 60, notes: 'Targets brachialis and brachioradialis to push biceps peak higher and thicken forearms.' },
+      { id: 'ex_cable_curl_bayesian', name: 'Bayesian Behind-Body Cable Curl', muscle: 'Arms', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Low Cable Station', defaultSets: 3, defaultTarget: '12-15', restSec: 60, notes: 'High tension in full elbow extension; superior stimulus-to-fatigue ratio.' },
+      { id: 'ex_tricep_overhead', name: 'Cable Overhead Rope Tricep Extension', muscle: 'Arms', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Cable Station & Rope', defaultSets: 3, defaultTarget: '10-14', restSec: 60, notes: 'Research shows overhead extensions yield ~40% greater long-head triceps hypertrophy than pushdowns.' },
+      { id: 'ex_tricep_pushdown', name: 'Cable Tricep Pressdown (Bar/Rope)', muscle: 'Arms', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'High Cable Station', defaultSets: 3, defaultTarget: '12-15', restSec: 60, notes: 'Targets lateral and medial heads of the triceps with locked elbows.' },
+      { id: 'ex_skullcrushers', name: 'EZ-Bar / Dumbbell Skullcrushers', muscle: 'Arms', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'EZ-Bar or Dumbbells', defaultSets: 3, defaultTarget: '10-12', restSec: 75, notes: 'Lower behind the crown of the head to maintain continuous tension at full stretch.' },
+
+      // --- CORE ---
+      { id: 'ex_hanging_leg_raise', name: 'Hanging Leg / Knee Raises', muscle: 'Core', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'Pull-Up Bar', defaultSets: 3, defaultTarget: '10-15', restSec: 60, notes: 'Curl pelvis upward (posterior pelvic tilt) to train rectus abdominis rather than just hip flexors.' },
+      { id: 'ex_cable_crunch', name: 'Kneeling Cable Rope Crunch', muscle: 'Core', type: 'Hypertrophy / Accessory', tracking: 'reps', equipment: 'High Cable Rope', defaultSets: 3, defaultTarget: '12-15', restSec: 60, notes: 'Allows progressive overload with exact weight increments for visible abdominal hypertrophy.' },
+      { id: 'ex_cable_woodchop', name: 'High-to-Low Cable Woodchoppers', muscle: 'Core', type: 'Functional Pattern', tracking: 'reps', equipment: 'Cable Station', defaultSets: 3, defaultTarget: '12/side', restSec: 60, notes: 'Trains rotational power and oblique anti-rotation transfer from hips to thoracic spine.' },
+
+      // --- FUNCTIONAL PATTERNS ---
+      { id: 'ex_kb_swing', name: 'Heavy Kettlebell Russian Swings', muscle: 'Full Body', type: 'Functional Pattern', tracking: 'reps', equipment: 'Kettlebell', defaultSets: 4, defaultTarget: '15-20', restSec: 60, notes: 'Explosive hip-hinge power, posterior chain conditioning, and athletic work capacity.' },
+      { id: 'ex_farmers_walk', name: 'Heavy Dumbbell Farmer’s Walk (40m)', muscle: 'Full Body', type: 'Functional Pattern', tracking: 'time', equipment: 'Heavy Dumbbells / Kettlebells', defaultSets: 3, defaultTarget: '40s', restSec: 75, notes: 'Builds crushing grip strength, upper traps, lateral core stability (quadratus lumborum), and gait mechanics.' },
+      { id: 'ex_turkish_getup', name: 'Kettlebell Turkish Get-Up (Alternating)', muscle: 'Full Body', type: 'Functional Pattern', tracking: 'reps', equipment: 'Kettlebell / Dumbbell', defaultSets: 3, defaultTarget: '3/side', restSec: 75, notes: 'Integrates shoulder stability, thoracic mobility, hip bridging, and multi-planar coordination.' },
+      { id: 'ex_pallof_press', name: 'Cable Anti-Rotation Pallof Press', muscle: 'Core', type: 'Functional Pattern', tracking: 'reps', equipment: 'Cable Station', defaultSets: 3, defaultTarget: '10/side', restSec: 60, notes: 'Resists lumbar rotation and lateral flexion—essential spine-sparing core stability.' },
+      { id: 'ex_single_leg_rdl', name: 'Single-Leg Dumbbell RDL', muscle: 'Legs', type: 'Functional Pattern', tracking: 'reps', equipment: 'Dumbbell / Kettlebell', defaultSets: 3, defaultTarget: '8/side', restSec: 60, notes: 'Trains glute medius hip stabilization, ankle proprioception, and hamstring eccentric control.' },
+      { id: 'ex_db_step_ups', name: 'High-Box Weighted Dumbbell Step-Ups', muscle: 'Legs', type: 'Functional Pattern', tracking: 'reps', equipment: 'Dumbbells & Plyo Box/Bench', defaultSets: 3, defaultTarget: '10/side', restSec: 75, notes: 'Unilateral athletic drive without pushing off the trail leg.' },
+      { id: 'ex_kb_clean_press', name: 'Single-Arm Kettlebell Clean & Press', muscle: 'Full Body', type: 'Functional Pattern', tracking: 'reps', equipment: 'Kettlebell', defaultSets: 3, defaultTarget: '8/side', restSec: 75, notes: 'Combines explosive hip extension with unilateral overhead stability and anti-lateral flexion.' },
+
+      // --- ISOMETRIC & INTERVAL TRAINING (Time-Based Seconds) ---
+      { id: 'ex_iso_wall_sit', name: 'Isometric 90° Wall Sit Hold', muscle: 'Legs', type: 'Isometric / Interval', tracking: 'time', equipment: 'Wall / Bodyweight', defaultSets: 3, defaultTarget: '45s', restSec: 60, notes: 'Clinical research shows isometric wall sits reduce resting blood pressure and build patellar tendon stiffness.' },
+      { id: 'ex_iso_dead_hang', name: 'Active Scapular Dead Hang Hold', muscle: 'Back', type: 'Isometric / Interval', tracking: 'time', equipment: 'Pull-Up Bar', defaultSets: 3, defaultTarget: '45s', restSec: 60, notes: 'Decompresses lumbar spine, remodels subacromial space, and builds forearm/grip endurance.' },
+      { id: 'ex_iso_rkc_plank', name: 'Max-Tension RKC Hardstyle Plank', muscle: 'Core', type: 'Isometric / Interval', tracking: 'time', equipment: 'Mat / Bodyweight', defaultSets: 3, defaultTarget: '30s', restSec: 60, notes: 'Maximal glute + quad + lat contraction generates 2x higher EMG core activation than standard planks.' },
+      { id: 'ex_iso_copenhagen', name: 'Copenhagen Adductor Side Plank', muscle: 'Legs', type: 'Isometric / Interval', tracking: 'time', equipment: 'Bench', defaultSets: 3, defaultTarget: '25s', restSec: 45, notes: 'Research-proven to slash groin/adductor injury risk by 41% while strengthening oblique slings.' },
+      { id: 'ex_iso_hollow_body', name: 'Hollow Body Gymnastic Hold', muscle: 'Core', type: 'Isometric / Interval', tracking: 'time', equipment: 'Mat', defaultSets: 3, defaultTarget: '35s', restSec: 45, notes: 'Locks ribcage to pelvis; directly carries over to handstands, pull-ups, and overhead pressing.' },
+      { id: 'ex_iso_pause_squat', name: 'Bottom-Position Goblet Squat Iso Hold', muscle: 'Legs', type: 'Isometric / Interval', tracking: 'time', equipment: 'Dumbbell / Kettlebell', defaultSets: 3, defaultTarget: '30s', restSec: 60, notes: 'Builds active hip/ankle mobility under load and eliminates sticking points out of the hole.' },
+      { id: 'ex_iso_chin_hold', name: 'Top-of-Pull-Up Chin-Over-Bar Hold', muscle: 'Back', type: 'Isometric / Interval', tracking: 'time', equipment: 'Pull-Up Bar', defaultSets: 3, defaultTarget: '25s', restSec: 60, notes: 'Overloads peak elbow-flexor and mid-back isometric strength at end-range contraction.' },
+      { id: 'ex_iso_l_sit', name: 'Parallel Bar / Bench L-Sit Hold', muscle: 'Core', type: 'Isometric / Interval', tracking: 'time', equipment: 'Dip Bars / Bench', defaultSets: 3, defaultTarget: '25s', restSec: 45, notes: 'Intense hip flexor, lower abdominal, and scapular depression isometric challenge.' },
+
+      // --- MOBILITY & FLEXIBILITY (Warm-Up & Cool-Down) ---
+      { id: 'ex_mob_wgs', name: 'World’s Greatest Stretch (Lunge + Thoracic Twist)', muscle: 'Full Body', type: 'Mobility / Flexibility', tracking: 'time', equipment: 'Stretching Zone', defaultSets: 2, defaultTarget: '45s', restSec: 15, notes: 'Opens hip flexors, hamstrings, adductors, and thoracic rotation in one fluid flow.' },
+      { id: 'ex_mob_90_90', name: '90/90 Hip Internal & External Rotation Switches', muscle: 'Legs', type: 'Mobility / Flexibility', tracking: 'time', equipment: 'Mat', defaultSets: 2, defaultTarget: '45s', restSec: 15, notes: 'Restores hip capsule internal rotation essential for pain-free deep squatting and deadlifting.' },
+      { id: 'ex_mob_thoracic', name: 'Bench Thoracic Spine Extension + Lat Stretch', muscle: 'Back', type: 'Mobility / Flexibility', tracking: 'time', equipment: 'Bench & PVC/Dowel', defaultSets: 2, defaultTarget: '45s', restSec: 15, notes: 'Reverses desk-posture thoracic kyphosis and unlocks overhead shoulder flexion.' },
+      { id: 'ex_mob_dislocates', name: 'Banded / PVC Shoulder Dislocates', muscle: 'Shoulders', type: 'Mobility / Flexibility', tracking: 'reps', equipment: 'Resistance Band / Stick', defaultSets: 2, defaultTarget: '12', restSec: 15, notes: 'Lubricates glenohumeral joint and stretches pectoralis minor prior to benching or overhead work.' },
+      { id: 'ex_mob_couch', name: 'Rear-Foot-Elevated Couch Stretch (Hip Flexor/Quad)', muscle: 'Legs', type: 'Mobility / Flexibility', tracking: 'time', equipment: 'Bench / Wall', defaultSets: 2, defaultTarget: '45s', restSec: 15, notes: 'Lengthens tight rectus femoris and iliopsoas to relieve anterior pelvic tilt and lower-back tightness.' },
+      { id: 'ex_mob_jefferson', name: 'Light Dumbbell Jefferson Curl (Loaded Mobility)', muscle: 'Back', type: 'Mobility / Flexibility', tracking: 'reps', equipment: 'Light Dumbbell / Kettlebell', defaultSets: 2, defaultTarget: '8', restSec: 30, notes: 'Segmental spinal flexion under light load strengthens posterior fascia and hamstring extensibility.' },
+      { id: 'ex_mob_squat_pry', name: 'Deep Squat Goblet Ankle & Hip Pry', muscle: 'Legs', type: 'Mobility / Flexibility', tracking: 'time', equipment: 'Light Kettlebell', defaultSets: 2, defaultTarget: '45s', restSec: 15, notes: 'Improves ankle dorsiflexion and hip abduction before lower-body compound lifts.' },
+      { id: 'ex_mob_pec_wall', name: 'Doorway / Rack Pec Minor & Bicep Fascial Stretch', muscle: 'Chest', type: 'Mobility / Flexibility', tracking: 'time', equipment: 'Squat Rack Upright', defaultSets: 2, defaultTarget: '40s', restSec: 15, notes: 'Post-workout static stretching in lengthened state aids recovery and shoulder posture.' }
+    ];
+
+    /**
+     * ============================================================================
+     * 2. APPLICATION STATE & LOCALSTORAGE PERSISTENCE
+     * ============================================================================
+     */
+    const STORAGE_KEY = 'fit4less_iron_science_v1';
+
+    let state = {
+      splitDays: 4, // 4 or 5
+      weightUnit: 'lbs', // 'lbs' or 'kg'
+      activeTab: 'schedule',
+      activeDayIndex: 0,
+      exercises: [], // Populated with DEFAULT_EXERCISES + user custom exercises
+      schedules: {
+        4: [],
+        5: []
+      },
+      // Active workout draft inputs: { [exerciseId]: [ { weight: '', reps: '', done: false }, ... ] }
+      activeDrafts: {},
+      // Progression memory: { [exerciseId]: { lastDate, sets: [{weight, reps}], bestWeight, bestReps, bestVolume } }
+      exerciseMemory: {},
+      // Completed workout logs: [ { id, date, dayTitle, durationMin, totalVolume, exercisesCount, details } ]
+      history: [],
+      // Backup timestamps
+      lastSavedAt: null,
+      lastExportedAt: null
+    };
+
+    // Holds validated imported JSON payload awaiting user confirmation
+    let pendingImportData = null;
+
+    // Filter state for Library
+    let libFilterMuscle = 'All';
+    let libFilterType = 'All';
+
+    // Swap modal context
+    let swapContext = { dayIndex: 0, blockIndex: 0, itemIndex: 0, currentExerciseId: null };
+
+    // Timer state
+    let timerState = {
+      intervalId: null,
+      remainingSec: 90,
+      totalSec: 90,
+      label: 'Rest Timer',
+      mode: 'REST',
+      isPaused: false
+    };
+
+    /**
+     * Load state from localStorage or initialize fresh default plans
+     */
+    function initApp() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          state = { ...state, ...parsed };
+          // Merge any new default exercises if missing
+          const existingIds = new Set(state.exercises.map(e => e.id));
+          DEFAULT_EXERCISES.forEach(defEx => {
+            if (!existingIds.has(defEx.id)) {
+              state.exercises.push(defEx);
+            }
+          });
+        } catch (err) {
+          console.error('Error loading saved state, initializing defaults:', err);
+          initializeFreshDefaults();
+        }
+      } else {
+        initializeFreshDefaults();
+      }
+
+      if (!state.schedules[4] || state.schedules[4].length !== 4) {
+        state.schedules[4] = generateWeeklySplit(4);
+      }
+      if (!state.schedules[5] || state.schedules[5].length !== 5) {
+        state.schedules[5] = generateWeeklySplit(5);
+      }
+
+      saveState();
+      updateUnitLabels();
+      updateBackupStatusUI();
+      renderAll();
+    }
+
+    function initializeFreshDefaults() {
+      state.exercises = JSON.parse(JSON.stringify(DEFAULT_EXERCISES));
+      state.schedules[4] = generateWeeklySplit(4);
+      state.schedules[5] = generateWeeklySplit(5);
+    }
+
+    function saveState() {
+      try {
+        state.lastSavedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        updateBackupStatusUI();
+      } catch (e) {
+        console.warn('LocalStorage quota warning:', e);
+      }
+    }
+
+    /**
+     * ============================================================================
+     * 3. SMART WORKOUT GENERATOR (45-60 MIN SESSIONS, BALANCED & ROTATABLE)
+     * ============================================================================
+     */
+    function pickRandom(arr, count, excludeIds = new Set()) {
+      const filtered = arr.filter(item => !excludeIds.has(item.id));
+      const pool = filtered.length >= count ? filtered : arr;
+      const shuffled = [...pool].sort(() => Math.random() - 0.5);
+      const selected = shuffled.slice(0, count);
+      selected.forEach(s => excludeIds.add(s.id));
+      return selected;
+    }
+
+    function createSessionDay(dayNum, title, subtitle, estMin, blueprintBlocks, usedIdsGlobal = new Set()) {
+      const blocks = blueprintBlocks.map(bp => {
+        const candidates = state.exercises.filter(ex => {
+          const muscleOk = bp.muscles.includes(ex.muscle);
+          const typeOk = bp.types.includes(ex.type);
+          return muscleOk && typeOk;
+        });
+        const chosen = pickRandom(candidates, bp.count, usedIdsGlobal);
+        return {
+          blockName: bp.blockName,
+          timeBadge: bp.timeBadge,
+          exerciseIds: chosen.map(c => c.id)
+        };
+      });
+
+      return {
+        dayNum,
+        title,
+        subtitle,
+        estMin,
+        blueprint: blueprintBlocks,
+        blocks
+      };
+    }
+
+    function generateWeeklySplit(daysCount) {
+      const used = new Set();
+
+      if (daysCount === 4) {
+        return [
+          createSessionDay(
+            1,
+            'Day 1 • Upper Body Compound Strength',
+            'Bench Press • Weighted Pull-Ups • Shoulder Stability',
+            55,
+            [
+              { blockName: '1. Warm-Up & Thoracic Mobility', timeBadge: '6 min', muscles: ['Shoulders', 'Back', 'Full Body'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Primary Compound Strength', timeBadge: '20 min', muscles: ['Chest', 'Back', 'Shoulders'], types: ['Compound Strength'], count: 2 },
+              { blockName: '3. Hypertrophy & Functional Upper', timeBadge: '18 min', muscles: ['Chest', 'Back', 'Shoulders', 'Arms'], types: ['Hypertrophy / Accessory'], count: 3 },
+              { blockName: '4. Isometric Core & Decompression', timeBadge: '8 min', muscles: ['Core', 'Back'], types: ['Isometric / Interval'], count: 1 }
+            ],
+            used
+          ),
+          createSessionDay(
+            2,
+            'Day 2 • Lower Body Strength & Hinge',
+            'Squats • Romanian Deadlifts • Unilateral Balance',
+            55,
+            [
+              { blockName: '1. Warm-Up & Hip Capsule Mobility', timeBadge: '7 min', muscles: ['Legs', 'Full Body'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Primary Lower Compounds', timeBadge: '22 min', muscles: ['Legs'], types: ['Compound Strength'], count: 2 },
+              { blockName: '3. Posterior Chain & Leg Hypertrophy', timeBadge: '16 min', muscles: ['Legs'], types: ['Hypertrophy / Accessory', 'Functional Pattern'], count: 2 },
+              { blockName: '4. Isometric Tendon & Adductor Hold', timeBadge: '8 min', muscles: ['Legs', 'Core'], types: ['Isometric / Interval'], count: 1 }
+            ],
+            used
+          ),
+          createSessionDay(
+            3,
+            'Day 3 • Posterior Chain, Pull & Push Hypertrophy',
+            'Deadlift Variations • Rows • Incline Press • Arms',
+            55,
+            [
+              { blockName: '1. Warm-Up & Loaded Spinal Mobility', timeBadge: '6 min', muscles: ['Back', 'Full Body'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Primary Pull & Incline Compounds', timeBadge: '20 min', muscles: ['Back', 'Chest'], types: ['Compound Strength'], count: 2 },
+              { blockName: '3. Delts, Lat & Arm Hypertrophy', timeBadge: '18 min', muscles: ['Back', 'Shoulders', 'Arms'], types: ['Hypertrophy / Accessory'], count: 3 },
+              { blockName: '4. Isometric Core / Grip Finisher', timeBadge: '7 min', muscles: ['Core', 'Back', 'Full Body'], types: ['Isometric / Interval', 'Functional Pattern'], count: 1 }
+            ],
+            used
+          ),
+          createSessionDay(
+            4,
+            'Day 4 • Full-Body Functional, Isometrics & Mobility',
+            'Kettlebell Athletics • Carries • Core & Deep Flexibility',
+            50,
+            [
+              { blockName: '1. Dynamic Flow & Joint Prep', timeBadge: '8 min', muscles: ['Full Body', 'Legs', 'Shoulders'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Multi-Planar Functional Strength', timeBadge: '20 min', muscles: ['Full Body', 'Legs', 'Core'], types: ['Functional Pattern'], count: 3 },
+              { blockName: '3. Timed Isometric Interval Circuit', timeBadge: '14 min', muscles: ['Core', 'Legs', 'Back'], types: ['Isometric / Interval'], count: 2 },
+              { blockName: '4. Parasympathetic Cool-Down Stretch', timeBadge: '8 min', muscles: ['Legs', 'Chest', 'Back'], types: ['Mobility / Flexibility'], count: 1 }
+            ],
+            used
+          )
+        ];
+      } else {
+        // 5-Day Split
+        return [
+          createSessionDay(
+            1,
+            'Day 1 • Push (Chest, Shoulders & Triceps)',
+            'Barbell Bench • Overhead Press • Stretched Hypertrophy',
+            52,
+            [
+              { blockName: '1. Shoulder & Thoracic Prep', timeBadge: '6 min', muscles: ['Shoulders', 'Chest', 'Full Body'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Pressing Compound Strength', timeBadge: '20 min', muscles: ['Chest', 'Shoulders'], types: ['Compound Strength'], count: 2 },
+              { blockName: '3. Pec, Lateral Delt & Tricep Isolation', timeBadge: '18 min', muscles: ['Chest', 'Shoulders', 'Arms'], types: ['Hypertrophy / Accessory'], count: 3 },
+              { blockName: '4. Pec Fascial Stretch & Core Hold', timeBadge: '6 min', muscles: ['Chest', 'Core'], types: ['Mobility / Flexibility', 'Isometric / Interval'], count: 1 }
+            ],
+            used
+          ),
+          createSessionDay(
+            2,
+            'Day 2 • Pull (Deadlifts, Pull-Ups & Upper Back)',
+            'Deadlift • Pull-Up Variations • Rear Delts & Biceps',
+            55,
+            [
+              { blockName: '1. Thoracic & Hip Hinge Prep', timeBadge: '6 min', muscles: ['Back', 'Full Body'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Heavy Pull & Vertical Pull Compounds', timeBadge: '22 min', muscles: ['Back'], types: ['Compound Strength'], count: 2 },
+              { blockName: '3. Upper-Back Thickness & Bicep Stretch', timeBadge: '18 min', muscles: ['Back', 'Arms'], types: ['Hypertrophy / Accessory'], count: 3 },
+              { blockName: '4. Active Scapular Dead Hang Hold', timeBadge: '6 min', muscles: ['Back'], types: ['Isometric / Interval'], count: 1 }
+            ],
+            used
+          ),
+          createSessionDay(
+            3,
+            'Day 3 • Legs (Squat, Hinge & Unilateral)',
+            'Barbell Squat • RDL • Bulgarian Split Squat • Calves',
+            55,
+            [
+              { blockName: '1. Hip 90/90 & Ankle Dorsiflexion Prep', timeBadge: '7 min', muscles: ['Legs', 'Full Body'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Primary Lower Body Compounds', timeBadge: '22 min', muscles: ['Legs'], types: ['Compound Strength'], count: 2 },
+              { blockName: '3. Quad, Hamstring & Calf Hypertrophy', timeBadge: '18 min', muscles: ['Legs'], types: ['Hypertrophy / Accessory'], count: 2 },
+              { blockName: '4. Isometric Wall Sit / Adductor Hold', timeBadge: '7 min', muscles: ['Legs'], types: ['Isometric / Interval'], count: 1 }
+            ],
+            used
+          ),
+          createSessionDay(
+            4,
+            'Day 4 • Upper Body Compound & Hypertrophy',
+            'Incline Press • Barbell/Chest-Supported Rows • Arms',
+            50,
+            [
+              { blockName: '1. Upper Joint Mobility Flow', timeBadge: '6 min', muscles: ['Shoulders', 'Back'], types: ['Mobility / Flexibility'], count: 1 },
+              { blockName: '2. Antagonist Upper Compounds', timeBadge: '20 min', muscles: ['Chest', 'Back'], types: ['Compound Strength'], count: 2 },
+              { blockName: '3. Delts & Super-Set Arm Hypertrophy', timeBadge: '18 min', muscles: ['Shoulders', 'Arms'], types: ['Hypertrophy / Accessory'], count: 3 },
+              { blockName: '4. Anti-Rotation Core Finisher', timeBadge: '6 min', muscles: ['Core'], types: ['Functional Pattern', 'Isometric / Interval'], count: 1 }
+            ],
+            used
+          ),
+          createSessionDay(
+            5,
+            'Day 5 • Functional Athletics, Isometrics & Mobility',
+            'Kettlebell Power • Farmer’s Carries • Deep Mobility',
+            48,
+            [
+              { blockName: '1. Full-Body Dynamic Mobility Flow', timeBadge: '8 min', muscles: ['Full Body', 'Legs'], types: ['Mobility / Flexibility'], count: 2 },
+              { blockName: '2. Functional Power & Loaded Carries', timeBadge: '18 min', muscles: ['Full Body', 'Legs', 'Core'], types: ['Functional Pattern'], count: 3 },
+              { blockName: '3. Timed Isometric Strength Intervals', timeBadge: '14 min', muscles: ['Core', 'Legs', 'Back'], types: ['Isometric / Interval'], count: 2 },
+              { blockName: '4. Hip Flexor & Spinal Decompression', timeBadge: '8 min', muscles: ['Legs', 'Back'], types: ['Mobility / Flexibility'], count: 1 }
+            ],
+            used
+          )
+        ];
+      }
+    }
+
+    /**
+     * Rotate a single day's exercises while preserving muscle group & block structure
+     */
+    function rotateSingleDay(dayIdx, notify = true) {
+      const currentSchedule = state.schedules[state.splitDays];
+      const day = currentSchedule[dayIdx];
+      if (!day) return;
+
+      // Exclude exercises currently in this day so user gets a genuinely fresh workout
+      const currentlyInDay = new Set();
+      day.blocks.forEach(b => b.exerciseIds.forEach(id => currentlyInDay.add(id)));
+
+      const newSession = createSessionDay(
+        day.dayNum,
+        day.title,
+        day.subtitle,
+        day.estMin,
+        day.blueprint,
+        currentlyInDay
+      );
+
+      currentSchedule[dayIdx] = newSession;
+      saveState();
+      renderWeeklySchedule();
+      if (state.activeTab === 'workout' && state.activeDayIndex === dayIdx) {
+        renderActiveWorkout();
+      }
+      if (notify) {
+        showToast(`Rotated ${day.title.split('•')[0].trim()} with fresh exercises!`, 'emerald');
+      }
+    }
+
+    /**
+     * ============================================================================
+     * 4. NAVIGATION & UI RENDERING
+     * ============================================================================
+     */
+    function switchTab(tabName) {
+      state.activeTab = tabName;
+      ['schedule', 'workout', 'library', 'history'].forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        const nav = document.getElementById(`nav-${t}`);
+        if (t === tabName) {
+          sec.classList.remove('hidden');
+          nav.classList.add('text-emerald-400', 'bg-emerald-500/10');
+          nav.classList.remove('text-slate-400');
+        } else {
+          sec.classList.add('hidden');
+          nav.classList.remove('text-emerald-400', 'bg-emerald-500/10');
+          nav.classList.add('text-slate-400');
+        }
+      });
+
+      if (tabName === 'schedule') renderWeeklySchedule();
+      if (tabName === 'workout') renderActiveWorkout();
+      if (tabName === 'library') renderExerciseLibrary();
+      if (tabName === 'history') renderHistoryTab();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function setSplitDays(days) {
+      state.splitDays = days;
+      if (state.activeDayIndex >= days) state.activeDayIndex = 0;
+      saveState();
+      renderWeeklySchedule();
+    }
+
+    function toggleWeightUnit() {
+      state.weightUnit = state.weightUnit === 'lbs' ? 'kg' : 'lbs';
+      saveState();
+      updateUnitLabels();
+      renderAll();
+      showToast(`Switched weight tracking to ${state.weightUnit.toUpperCase()}`, 'emerald');
+    }
+
+    function updateUnitLabels() {
+      document.getElementById('unitToggleBtn').textContent = state.weightUnit.toUpperCase();
+      document.querySelectorAll('.unit-label').forEach(el => {
+        el.textContent = state.weightUnit;
+      });
+    }
+
+    function renderAll() {
+      renderWeeklySchedule();
+      renderActiveWorkout();
+      renderExerciseLibrary();
+      renderHistoryTab();
+      updateBackupStatusUI();
+    }
+
+    function getExerciseById(id) {
+      return state.exercises.find(e => e.id === id) || state.exercises[0];
+    }
+
+    function getTypeBadgeStyle(type) {
+      switch (type) {
+        case 'Compound Strength':
+          return 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30';
+        case 'Hypertrophy / Accessory':
+          return 'bg-sky-500/15 text-sky-300 border-sky-500/30';
+        case 'Functional Pattern':
+          return 'bg-purple-500/15 text-purple-300 border-purple-500/30';
+        case 'Isometric / Interval':
+          return 'bg-amber-500/15 text-amber-300 border-amber-500/30';
+        case 'Mobility / Flexibility':
+          return 'bg-teal-500/15 text-teal-300 border-teal-500/30';
+        default:
+          return 'bg-slate-800 text-slate-300 border-slate-700';
+      }
+    }
+
+    /**
+     * RENDER TAB 1: WEEKLY SCHEDULE
+     */
+    function renderWeeklySchedule() {
+      const btn4 = document.getElementById('splitBtn4');
+      const btn5 = document.getElementById('splitBtn5');
+
+      if (state.splitDays === 4) {
+        btn4.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 shadow transition';
+        btn5.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition';
+        document.getElementById('splitDescriptionBox').innerHTML = `
+          <span><strong class="text-emerald-400">4-Day Architecture:</strong> Upper Strength • Lower Hinge/Squat • Posterior/Push Hypertrophy • Functional/Isometrics</span>
+          <span class="font-mono text-[11px] text-slate-400">3 Rest/Active Recovery Days</span>
+        `;
+      } else {
+        btn5.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-slate-950 shadow transition';
+        btn4.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition';
+        document.getElementById('splitDescriptionBox').innerHTML = `
+          <span><strong class="text-emerald-400">5-Day Architecture:</strong> Push • Pull • Legs • Upper Compound • Functional/Isometrics/Mobility</span>
+          <span class="font-mono text-[11px] text-slate-400">2 Recovery Days</span>
+        `;
+      }
+
+      const schedule = state.schedules[state.splitDays];
+      const container = document.getElementById('weeklyDaysList');
+
+      container.innerHTML = schedule.map((day, idx) => {
+        const allExIds = day.blocks.flatMap(b => b.exerciseIds);
+        const previewItems = allExIds.map(id => {
+          const ex = getExerciseById(id);
+          const mem = state.exerciseMemory[id];
+          const lastTag = mem && mem.sets && mem.sets.length
+            ? `<span class="text-[10px] font-mono text-emerald-400">Last: ${mem.sets[0].weight || 0}${state.weightUnit} × ${mem.sets[0].reps}${ex.tracking === 'time' ? 's' : ''}</span>`
+            : '';
+          return `
+            <div class="flex items-center justify-between py-1.5 border-b border-slate-800/60 last:border-0 text-xs">
+              <div class="flex items-center gap-2 min-w-0 pr-2">
+                <span class="w-1.5 h-1.5 rounded-full shrink-0 ${ex.tracking === 'time' ? 'bg-amber-400' : 'bg-emerald-400'}"></span>
+                <span class="text-slate-200 font-medium truncate">${ex.name}</span>
+              </div>
+              <div class="flex items-center gap-2 shrink-0">
+                ${lastTag}
+                <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">${ex.defaultSets}×${ex.defaultTarget}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl p-4 shadow-lg transition">
+            <div class="flex flex-wrap items-start justify-between gap-2 pb-3 border-b border-slate-800">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-emerald-400">~${day.estMin} MIN</span>
+                  <span class="text-[11px] text-slate-400">${allExIds.length} Exercises</span>
+                </div>
+                <h3 class="text-base sm:text-lg font-extrabold text-white mt-1">${day.title}</h3>
+                <p class="text-xs text-slate-400">${day.subtitle}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button onclick="rotateSingleDay(${idx}, true)" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 transition" title="Shuffle exercises for this day">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+                <button onclick="startDayWorkout(${idx})" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-md shadow-emerald-500/15 transition">
+                  Start Session →
+                </button>
+              </div>
+            </div>
+            <div class="mt-2">
+              ${previewItems}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function startDayWorkout(dayIdx) {
+      state.activeDayIndex = dayIdx;
+      saveState();
+      switchTab('workout');
+    }
+
+    /**
+     * RENDER TAB 2: ACTIVE WORKOUT & PROGRESSION LOGGER
+     */
+    function ensureDraftSets(exercise) {
+      if (!state.activeDrafts[exercise.id] || !state.activeDrafts[exercise.id].length) {
+        const mem = state.exerciseMemory[exercise.id];
+        const count = exercise.defaultSets || 3;
+        const rows = [];
+        for (let i = 0; i < count; i++) {
+          const prevSet = mem && mem.sets && mem.sets[i] ? mem.sets[i] : (mem && mem.sets && mem.sets[0] ? mem.sets[0] : null);
+          rows.push({
+            weight: prevSet ? prevSet.weight : '',
+            reps: prevSet ? prevSet.reps : '',
+            done: false
+          });
+        }
+        state.activeDrafts[exercise.id] = rows;
+      }
+      return state.activeDrafts[exercise.id];
+    }
+
+    function renderActiveWorkout() {
+      const schedule = state.schedules[state.splitDays];
+      const day = schedule[state.activeDayIndex] || schedule[0];
+      if (!day) return;
+
+      document.getElementById('activeDayBadge').textContent = `DAY ${day.dayNum} OF ${state.splitDays}`;
+      document.getElementById('activeDurationBadge').textContent = `~${day.estMin} MIN`;
+      document.getElementById('activeSessionTitle').textContent = day.title;
+      document.getElementById('activeSessionFocus').textContent = day.subtitle;
+
+      // Day switcher pills
+      document.getElementById('activeDayPills').innerHTML = schedule.map((d, i) => `
+        <button onclick="startDayWorkout(${i})" class="px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition ${i === state.activeDayIndex ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-400 hover:text-white'}">
+          Day ${d.dayNum}
+        </button>
+      `).join('');
+
+      // Blocks
+      const blocksContainer = document.getElementById('activeWorkoutBlocks');
+      blocksContainer.innerHTML = day.blocks.map((block, bIdx) => {
+        const exerciseCards = block.exerciseIds.map((exId, eIdx) => {
+          const ex = getExerciseById(exId);
+          const draftRows = ensureDraftSets(ex);
+          const mem = state.exerciseMemory[ex.id];
+          const isTime = ex.tracking === 'time';
+          const defaultSec = parseInt(ex.defaultTarget) || 30;
+
+          // Previous Performance Memory Banner
+          let prevHtml = `<span class="text-slate-500">First session — establish your baseline!</span>`;
+          if (mem && mem.sets && mem.sets.length > 0) {
+            const summary = mem.sets.map(s => {
+              const wPart = s.weight && Number(s.weight) > 0 ? `${s.weight}${state.weightUnit} × ` : '';
+              return `${wPart}${s.reps}${isTime ? 's' : ''}`;
+            }).join(', ');
+            prevHtml = `<span class="text-emerald-400 font-semibold">Last (${mem.lastDate}):</span> <span class="font-mono text-slate-200">${summary}</span>`;
+          }
+
+          // Set Rows
+          const setsHtml = draftRows.map((row, sIdx) => `
+            <div class="grid grid-cols-12 gap-2 items-center py-1.5 ${row.done ? 'opacity-65' : ''}">
+              <div class="col-span-2 text-center">
+                <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg bg-slate-800 text-xs font-mono font-bold text-slate-300">${sIdx + 1}</span>
+              </div>
+              <div class="col-span-4">
+                <div class="relative">
+                  <input type="number" step="any" inputmode="decimal"
+                    value="${row.weight}"
+                    placeholder="${isTime ? '0 (opt)' : 'Weight'}"
+                    onchange="updateDraftSet('${ex.id}', ${sIdx}, 'weight', this.value)"
+                    class="w-full px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-center font-mono text-sm text-white focus:outline-none focus:border-emerald-500" />
+                  <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500 pointer-events-none">${state.weightUnit}</span>
+                </div>
+              </div>
+              <div class="col-span-4">
+                <div class="relative">
+                  <input type="number" step="any" inputmode="numeric"
+                    value="${row.reps}"
+                    placeholder="${isTime ? defaultSec : ex.defaultTarget}"
+                    onchange="updateDraftSet('${ex.id}', ${sIdx}, 'reps', this.value)"
+                    class="w-full px-2.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-center font-mono text-sm text-white focus:outline-none focus:border-emerald-500" />
+                  <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500 pointer-events-none">${isTime ? 'sec' : 'reps'}</span>
+                </div>
+              </div>
+              <div class="col-span-2 flex justify-center">
+                <button onclick="toggleSetDone('${ex.id}', ${sIdx}, ${ex.restSec})"
+                  class="w-9 h-9 rounded-xl flex items-center justify-center border transition ${row.done ? 'bg-emerald-500 border-emerald-400 text-slate-950 shadow-md shadow-emerald-500/20' : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-emerald-500/50'}">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.8" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          `).join('');
+
+          return `
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 shadow-md">
+              <!-- Card Header -->
+              <div class="flex items-start justify-between gap-2">
+                <div>
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${getTypeBadgeStyle(ex.type)}">${ex.type}</span>
+                    <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-slate-800 text-slate-300">${ex.muscle}</span>
+                    <span class="text-[10px] text-slate-400">• ${ex.equipment}</span>
+                  </div>
+                  <h4 class="text-base font-extrabold text-white mt-1.5">${ex.name}</h4>
+                </div>
+                <button onclick="openSwapModal(${state.activeDayIndex}, ${bIdx}, ${eIdx}, '${ex.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-slate-300 border border-slate-700 shrink-0">
+                  Swap
+                </button>
+              </div>
+
+              <!-- Science / Execution Cue -->
+              <p class="text-xs text-slate-400 bg-slate-950/70 border border-slate-800/80 rounded-xl px-3 py-2 leading-relaxed">
+                <strong class="text-slate-300">Cue & Science:</strong> ${ex.notes}
+              </p>
+
+              <!-- Previous Performance Memory & Built-In Interval/Rest Timer Trigger -->
+              <div class="flex flex-wrap items-center justify-between gap-2 text-xs bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
+                <div>${prevHtml}</div>
+                ${isTime
+                  ? `<button onclick="openTimerModal(${defaultSec}, '${ex.name.replace(/'/g, "\\'")}', 'ISOMETRIC')" class="px-2.5 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono font-bold text-[11px] flex items-center gap-1">
+                      ⏱ Start ${defaultSec}s Hold
+                    </button>`
+                  : `<button onclick="openTimerModal(${ex.restSec}, 'Rest: ${ex.name.replace(/'/g, "\\'")}', 'REST')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-emerald-300 font-mono font-bold text-[11px]">
+                      ⏱ ${ex.restSec}s Rest
+                    </button>`
+                }
+              </div>
+
+              <!-- Table Header -->
+              <div class="grid grid-cols-12 gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-500 text-center pt-1">
+                <div class="col-span-2">Set</div>
+                <div class="col-span-4">Load (${state.weightUnit})</div>
+                <div class="col-span-4">${isTime ? 'Hold (Sec)' : `Reps (${ex.defaultTarget})`}</div>
+                <div class="col-span-2">Done</div>
+              </div>
+
+              <!-- Sets List -->
+              <div class="divide-y divide-slate-800/50">
+                ${setsHtml}
+              </div>
+
+              <!-- Add / Remove Set Controls -->
+              <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
+                <button onclick="addDraftSet('${ex.id}')" class="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                  + Add Set
+                </button>
+                ${draftRows.length > 1 ? `<button onclick="removeDraftSet('${ex.id}')" class="text-xs font-semibold text-slate-500 hover:text-rose-400">Remove Set</button>` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        return `
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between px-1">
+              <h3 class="text-xs font-extrabold uppercase tracking-wider text-emerald-400">${block.blockName}</h3>
+              <span class="text-[11px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">${block.timeBadge}</span>
+            </div>
+            ${exerciseCards}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateDraftSet(exId, setIdx, field, value) {
+      if (!state.activeDrafts[exId]) return;
+      state.activeDrafts[exId][setIdx][field] = value;
+      saveState();
+    }
+
+    function toggleSetDone(exId, setIdx, restSec) {
+      const row = state.activeDrafts[exId][setIdx];
+      row.done = !row.done;
+      saveState();
+      renderActiveWorkout();
+      if (row.done && restSec > 0) {
+        const ex = getExerciseById(exId);
+        startTimer(restSec, `Rest: ${ex.name}`, 'REST');
+      }
+    }
+
+    function addDraftSet(exId) {
+      const rows = state.activeDrafts[exId];
+      const last = rows[rows.length - 1] || { weight: '', reps: '' };
+      rows.push({ weight: last.weight, reps: last.reps, done: false });
+      saveState();
+      renderActiveWorkout();
+    }
+
+    function removeDraftSet(exId) {
+      const rows = state.activeDrafts[exId];
+      if (rows.length > 1) {
+        rows.pop();
+        saveState();
+        renderActiveWorkout();
+      }
+    }
+
+    /**
+     * Save Completed Workout & Update Exercise Progression Memory
+     */
+    function finishAndSaveWorkout() {
+      const schedule = state.schedules[state.splitDays];
+      const day = schedule[state.activeDayIndex];
+      const allExIds = day.blocks.flatMap(b => b.exerciseIds);
+      const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+
+      let totalVolume = 0;
+      let loggedCount = 0;
+      const sessionDetails = [];
+
+      allExIds.forEach(exId => {
+        const ex = getExerciseById(exId);
+        const draft = state.activeDrafts[exId] || [];
+        // Keep sets that have either reps/time entered or were marked done
+        const validSets = draft.filter(s => (s.reps !== '' && Number(s.reps) > 0) || s.done).map(s => ({
+          weight: Number(s.weight) || 0,
+          reps: Number(s.reps) || (parseInt(ex.defaultTarget) || 10)
+        }));
+
+        if (validSets.length > 0) {
+          loggedCount++;
+          let exVol = 0;
+          let maxW = 0;
+          let maxR = 0;
+          validSets.forEach(vs => {
+            exVol += (vs.weight > 0 ? vs.weight : 1) * vs.reps;
+            if (vs.weight > maxW) maxW = vs.weight;
+            if (vs.reps > maxR) maxR = vs.reps;
+          });
+          totalVolume += exVol;
+
+          const prevMem = state.exerciseMemory[exId] || { logs: [] };
+          const updatedLogs = [
+            { date: todayStr, sets: validSets, volume: exVol },
+            ...(prevMem.logs || [])
+          ].slice(0, 20);
+
+          state.exerciseMemory[exId] = {
+            lastDate: todayStr,
+            sets: validSets,
+            bestWeight: Math.max(prevMem.bestWeight || 0, maxW),
+            bestReps: Math.max(prevMem.bestReps || 0, maxR),
+            logs: updatedLogs
+          };
+
+          sessionDetails.push({
+            exerciseId: exId,
+            name: ex.name,
+            tracking: ex.tracking,
+            sets: validSets
+          });
+
+          // Reset 'done' flags for next time while keeping numbers prefilled
+          state.activeDrafts[exId] = validSets.map(vs => ({
+            weight: vs.weight || '',
+            reps: vs.reps || '',
+            done: false
+          }));
+        }
+      });
+
+      if (loggedCount === 0) {
+        showToast('Log at least one set (reps/seconds or checkmark) before saving!', 'amber');
+        return;
+      }
+
+      state.history.unshift({
+        id: 'wk_' + Date.now(),
+        date: todayStr,
+        dayTitle: day.title,
+        durationMin: day.estMin,
+        totalVolume: Math.round(totalVolume),
+        unit: state.weightUnit,
+        exercisesCount: loggedCount,
+        details: sessionDetails
+      });
+
+      // Advance active day pointer for next session
+      state.activeDayIndex = (state.activeDayIndex + 1) % state.splitDays;
+      saveState();
+      showToast('Workout saved! Progression memory updated.', 'emerald');
+      switchTab('history');
+    }
+
+    /**
+     * ============================================================================
+     * 5. EXERCISE SWAPPER MODAL
+     * ============================================================================
+     */
+    function openSwapModal(dayIndex, blockIndex, itemIndex, currentExerciseId) {
+      swapContext = { dayIndex, blockIndex, itemIndex, currentExerciseId };
+      const currentEx = getExerciseById(currentExerciseId);
+      document.getElementById('swapModalSubtitle').textContent = `Replacing: ${currentEx.name} (${currentEx.muscle})`;
+      document.getElementById('swapSearchInput').value = '';
+      renderSwapOptions();
+      document.getElementById('swapModal').classList.remove('hidden');
+    }
+
+    function closeSwapModal() {
+      document.getElementById('swapModal').classList.add('hidden');
+    }
+
+    function renderSwapOptions() {
+      const query = document.getElementById('swapSearchInput').value.toLowerCase().trim();
+      const currentEx = getExerciseById(swapContext.currentExerciseId);
+
+      // Sort same muscle group & same type first
+      const sorted = [...state.exercises].sort((a, b) => {
+        const aScore = (a.muscle === currentEx.muscle ? 2 : 0) + (a.type === currentEx.type ? 1 : 0);
+        const bScore = (b.muscle === currentEx.muscle ? 2 : 0) + (b.type === currentEx.type ? 1 : 0);
+        return bScore - aScore;
+      }).filter(ex => {
+        if (!query) return true;
+        return ex.name.toLowerCase().includes(query) ||
+               ex.muscle.toLowerCase().includes(query) ||
+               ex.type.toLowerCase().includes(query);
+      });
+
+      document.getElementById('swapOptionsList').innerHTML = sorted.map(ex => `
+        <button onclick="confirmSwapExercise('${ex.id}')" class="w-full text-left p-3 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 transition flex items-center justify-between gap-2">
+          <div>
+            <div class="text-sm font-bold text-white">${ex.name}</div>
+            <div class="text-[11px] text-slate-400 mt-0.5">${ex.muscle} • ${ex.type} • ${ex.equipment}</div>
+          </div>
+          <span class="text-xs font-bold text-emerald-400 shrink-0">Select →</span>
+        </button>
+      `).join('');
+    }
+
+    function confirmSwapExercise(newExId) {
+      const { dayIndex, blockIndex, itemIndex } = swapContext;
+      state.schedules[state.splitDays][dayIndex].blocks[blockIndex].exerciseIds[itemIndex] = newExId;
+      saveState();
+      closeSwapModal();
+      renderActiveWorkout();
+      renderWeeklySchedule();
+      showToast(`Swapped to ${getExerciseById(newExId).name}`, 'emerald');
+    }
+
+    /**
+     * ============================================================================
+     * 6. EXERCISE LIBRARY & CUSTOM WORKOUT CREATOR
+     * ============================================================================
+     */
+    function toggleCustomForm() {
+      const card = document.getElementById('customExerciseFormCard');
+      card.classList.toggle('hidden');
+    }
+
+    function autoSuggestTrackingMode() {
+      const type = document.getElementById('custType').value;
+      const trackingSelect = document.getElementById('custTracking');
+      if (type === 'Isometric / Interval') {
+        trackingSelect.value = 'time';
+      } else {
+        trackingSelect.value = 'reps';
+      }
+    }
+
+    function handleCreateCustomExercise(event) {
+      event.preventDefault();
+      const name = document.getElementById('custName').value.trim();
+      const muscle = document.getElementById('custMuscle').value;
+      const type = document.getElementById('custType').value;
+      const tracking = document.getElementById('custTracking').value;
+      const equipment = document.getElementById('custEquipment').value.trim() || 'Fit4Less Gym Equipment';
+      const notes = document.getElementById('custNotes').value.trim() || 'Custom user movement added to Fit4Less progression database.';
+      const injectNow = document.getElementById('custInjectNow').checked;
+
+      if (!name) return;
+
+      const newEx = {
+        id: 'custom_' + Date.now(),
+        name,
+        muscle,
+        type,
+        tracking,
+        equipment,
+        defaultSets: 3,
+        defaultTarget: tracking === 'time' ? '40s' : '8-12',
+        restSec: type === 'Compound Strength' ? 120 : (tracking === 'time' ? 45 : 75),
+        notes,
+        isCustom: true
+      };
+
+      state.exercises.unshift(newEx);
+
+      // Optionally inject into today's active workout immediately
+      if (injectNow) {
+        const activeDay = state.schedules[state.splitDays][state.activeDayIndex];
+        if (activeDay && activeDay.blocks.length > 0) {
+          // Put into block 2 or 3 (main working blocks)
+          const targetBlockIdx = Math.min(2, activeDay.blocks.length - 1);
+          activeDay.blocks[targetBlockIdx].exerciseIds.push(newEx.id);
+        }
+      }
+
+      saveState();
+      document.getElementById('customExerciseForm').reset();
+      document.getElementById('customExerciseFormCard').classList.add('hidden');
+      renderAll();
+      showToast(`Added "${name}" to database${injectNow ? ' & today’s session' : ''}!`, 'emerald');
+    }
+
+    function renderExerciseLibrary() {
+      document.getElementById('dbTotalCount').textContent = state.exercises.length;
+
+      const muscles = ['All', 'Chest', 'Back', 'Shoulders', 'Legs', 'Arms', 'Core', 'Full Body'];
+      document.getElementById('libMuscleFilters').innerHTML = muscles.map(m => `
+        <button onclick="libFilterMuscle='${m}'; renderExerciseLibrary();" class="px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition ${libFilterMuscle === m ? 'bg-emerald-500 text-slate-950' : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'}">
+          ${m}
+        </button>
+      `).join('');
+
+      const types = ['All', 'Compound Strength', 'Hypertrophy / Accessory', 'Functional Pattern', 'Isometric / Interval', 'Mobility / Flexibility'];
+      document.getElementById('libTypeFilters').innerHTML = types.map(t => `
+        <button onclick="libFilterType='${t}'; renderExerciseLibrary();" class="px-3 py-1 rounded-lg text-[11px] font-semibold whitespace-nowrap transition ${libFilterType === t ? 'bg-amber-400 text-slate-950' : 'bg-slate-950 text-slate-400 border border-slate-800 hover:text-white'}">
+          ${t}
+        </button>
+      `).join('');
+
+      const query = (document.getElementById('libSearchInput').value || '').toLowerCase().trim();
+
+      const filtered = state.exercises.filter(ex => {
+        const mOk = libFilterMuscle === 'All' || ex.muscle === libFilterMuscle;
+        const tOk = libFilterType === 'All' || ex.type === libFilterType;
+        const qOk = !query ||
+          ex.name.toLowerCase().includes(query) ||
+          ex.equipment.toLowerCase().includes(query) ||
+          ex.notes.toLowerCase().includes(query);
+        return mOk && tOk && qOk;
+      });
+
+      document.getElementById('exerciseLibraryGrid').innerHTML = filtered.map(ex => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col justify-between gap-3">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-1.5">
+              <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${getTypeBadgeStyle(ex.type)}">${ex.type}</span>
+              <div class="flex items-center gap-1.5">
+                ${ex.isCustom ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">CUSTOM</span>` : ''}
+                <span class="text-[11px] font-semibold text-slate-400">${ex.muscle}</span>
+              </div>
+            </div>
+            <h4 class="text-sm sm:text-base font-extrabold text-white mt-2">${ex.name}</h4>
+            <p class="text-[11px] text-slate-400 mt-0.5">Equipment: <span class="text-slate-300">${ex.equipment}</span> • Mode: <span class="text-amber-300 font-mono">${ex.tracking === 'time' ? 'Timed Interval (s)' : 'Weight + Reps'}</span></p>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">${ex.notes}</p>
+          </div>
+          <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+            <span class="text-[11px] font-mono text-slate-500">Default: ${ex.defaultSets} × ${ex.defaultTarget}</span>
+            <button onclick="quickAddToToday('${ex.id}')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-xs font-bold text-emerald-400 transition">
+              + Add to Active Day
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function quickAddToToday(exId) {
+      const day = state.schedules[state.splitDays][state.activeDayIndex];
+      const targetBlockIdx = Math.min(2, day.blocks.length - 1);
+      day.blocks[targetBlockIdx].exerciseIds.push(exId);
+      saveState();
+      showToast(`Added "${getExerciseById(exId).name}" to ${day.title.split('•')[0].trim()}!`, 'emerald');
+    }
+
+    /**
+     * ============================================================================
+     * 7. PROGRESSION HISTORY & BACKUP EXPORT/IMPORT
+     * ============================================================================
+     */
+    function renderHistoryTab() {
+      document.getElementById('statTotalWorkouts').textContent = state.history.length;
+      document.getElementById('statTrackedExercises').textContent = Object.keys(state.exerciseMemory).length;
+
+      const totalVol = state.history.reduce((sum, h) => sum + (h.totalVolume || 0), 0);
+      document.getElementById('statTotalVolume').textContent = totalVol >= 1000 ? `${(totalVol / 1000).toFixed(1)}k` : totalVol;
+
+      // Populate Progression Dropdown
+      const select = document.getElementById('progressionExerciseSelect');
+      const currentVal = select.value;
+      select.innerHTML = state.exercises.map(ex => {
+        const hasData = state.exerciseMemory[ex.id] ? '★ ' : '';
+        return `<option value="${ex.id}">${hasData}${ex.name} (${ex.muscle})</option>`;
+      }).join('');
+      if (currentVal) select.value = currentVal;
+
+      renderExerciseProgressionDetail();
+
+      // Recent Workouts List
+      const listEl = document.getElementById('workoutHistoryList');
+      if (state.history.length === 0) {
+        listEl.innerHTML = `
+          <div class="text-center py-8 text-slate-500 text-xs">
+            No completed sessions logged yet. Head to <strong class="text-emerald-400">Active Session</strong> and tap <strong>Complete & Save Workout</strong> after logging sets!
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = state.history.map(item => `
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-sm font-bold text-white">${item.dayTitle}</div>
+              <div class="text-[11px] text-slate-400 font-mono">${item.date} • ${item.exercisesCount} exercises • Vol: ${item.totalVolume} ${item.unit}</div>
+            </div>
+          </div>
+          <div class="text-xs text-slate-300 space-y-1 pt-1 border-t border-slate-800/70">
+            ${item.details.map(d => {
+              const sStr = d.sets.map(s => `${s.weight > 0 ? s.weight + item.unit + '×' : ''}${s.reps}${d.tracking === 'time' ? 's' : ''}`).join(', ');
+              return `<div class="flex justify-between gap-2"><span class="text-slate-400 truncate">${d.name}</span><span class="font-mono text-emerald-400 shrink-0">${sStr}</span></div>`;
+            }).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderExerciseProgressionDetail() {
+      const exId = document.getElementById('progressionExerciseSelect').value;
+      const ex = getExerciseById(exId);
+      const mem = state.exerciseMemory[exId];
+      const box = document.getElementById('progressionDetailBox');
+
+      if (!mem || !mem.logs || mem.logs.length === 0) {
+        box.innerHTML = `No logged data yet for <strong class="text-white">${ex.name}</strong>. Complete a session with this movement to see your PRs and progression history.`;
+        return;
+      }
+
+      const isTime = ex.tracking === 'time';
+      box.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-slate-800">
+          <div>
+            <span class="text-slate-400">All-Time Best Load:</span>
+            <strong class="font-mono text-emerald-400 text-sm ml-1">${mem.bestWeight} ${state.weightUnit}</strong>
+          </div>
+          <div>
+            <span class="text-slate-400">Peak ${isTime ? 'Hold' : 'Reps'}:</span>
+            <strong class="font-mono text-amber-400 text-sm ml-1">${mem.bestReps}${isTime ? 's' : ' reps'}</strong>
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          ${mem.logs.map(l => {
+            const setSummary = l.sets.map(s => `${s.weight > 0 ? s.weight + state.weightUnit + ' × ' : ''}${s.reps}${isTime ? 's' : ''}`).join('  |  ');
+            return `
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-mono text-slate-400">${l.date}</span>
+                <span class="font-mono text-slate-200">${setSummary}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function exportBackupJSON() {
+      const now = new Date();
+      const timestampLabel = now.toLocaleString([], {
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      state.lastExportedAt = timestampLabel;
+      saveState();
+
+      const customCount = state.exercises.filter(e => e.isCustom).length;
+      const exportPayload = {
+        app: 'Fit4Less Iron & Science Workout Tracker',
+        version: '1.1.0',
+        exportedAt: now.toISOString(),
+        exportedAtFormatted: timestampLabel,
+        summary: {
+          workoutsLogged: state.history.length,
+          customExercises: customCount,
+          splitDays: state.splitDays,
+          weightUnit: state.weightUnit
+        },
+        data: state
+      };
+
+      const dataStr = JSON.stringify(exportPayload, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `fit4less-workout-backup-${now.toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      updateBackupStatusUI();
+      showToast(`Exported backup (${state.history.length} sessions, ${customCount} custom lifts)!`, 'emerald');
+    }
+
+    function openBackupModal() {
+      cancelPendingImport();
+      updateBackupStatusUI();
+      document.getElementById('backupModal').classList.remove('hidden');
+    }
+
+    function closeBackupModal() {
+      cancelPendingImport();
+      document.getElementById('backupModal').classList.add('hidden');
+    }
+
+    function updateBackupStatusUI() {
+      const customCount = state.exercises.filter(e => e.isCustom).length;
+      const savedStr = state.lastSavedAt ? `Saved ${state.lastSavedAt}` : 'Auto-saved locally';
+      const exportedStr = state.lastExportedAt ? `Last exported: ${state.lastExportedAt}` : 'Never exported';
+
+      const inlineEl = document.getElementById('backupStatusInline');
+      if (inlineEl) {
+        inlineEl.textContent = `${savedStr} • ${exportedStr}`;
+      }
+
+      const modalSavedEl = document.getElementById('modalLastSavedText');
+      const modalExpEl = document.getElementById('modalLastExportedText');
+      const modalSumEl = document.getElementById('modalDataSummaryText');
+      if (modalSavedEl) modalSavedEl.textContent = savedStr;
+      if (modalExpEl) modalExpEl.textContent = state.lastExportedAt || 'Never';
+      if (modalSumEl) modalSumEl.textContent = `${state.history.length} sessions • ${customCount} custom`;
+    }
+
+    function handleImportFileSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          // Support both v1.1 wrapped payload ({ data: state }) and v1.0 raw state object
+          const candidateState = parsed && parsed.data && parsed.data.exercises ? parsed.data : parsed;
+
+          if (!candidateState || !Array.isArray(candidateState.exercises) || !candidateState.schedules) {
+            showToast('Invalid Fit4Less JSON backup file.', 'amber');
+            event.target.value = '';
+            return;
+          }
+
+          pendingImportData = candidateState;
+          const workoutsCount = Array.isArray(candidateState.history) ? candidateState.history.length : 0;
+          const customCount = candidateState.exercises.filter(ex => ex.isCustom).length;
+          const backupDate = parsed.exportedAtFormatted || candidateState.lastExportedAt || 'Unknown date';
+
+          document.getElementById('importPreviewDetails').innerHTML = `
+            Backup Date: <strong class="text-white">${backupDate}</strong><br/>
+            Contains: <strong class="text-emerald-400">${workoutsCount} logged workouts</strong>,
+            <strong class="text-sky-400">${customCount} custom exercises</strong>,
+            and <strong class="text-amber-300">${candidateState.splitDays || 4}-Day split</strong> (${(candidateState.weightUnit || 'lbs').toUpperCase()}).
+          `;
+          document.getElementById('importConfirmPanel').classList.remove('hidden');
+          document.getElementById('backupModal').classList.remove('hidden');
+        } catch (err) {
+          showToast('Could not read JSON file — please check file format.', 'amber');
+        }
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    function applyPendingImport(mode) {
+      if (!pendingImportData) return;
+
+      if (mode === 'overwrite') {
+        state = {
+          ...state,
+          ...pendingImportData
+        };
+      } else if (mode === 'merge') {
+        // Merge custom exercises without duplicates
+        const existingExIds = new Set(state.exercises.map(e => e.id));
+        (pendingImportData.exercises || []).forEach(ex => {
+          if (!existingExIds.has(ex.id)) {
+            state.exercises.push(ex);
+          }
+        });
+        // Merge workout history by session ID
+        const existingHistIds = new Set(state.history.map(h => h.id));
+        (pendingImportData.history || []).forEach(h => {
+          if (!existingHistIds.has(h.id)) {
+            state.history.push(h);
+          }
+        });
+        // Merge exercise progression memory
+        state.exerciseMemory = {
+          ...(pendingImportData.exerciseMemory || {}),
+          ...state.exerciseMemory
+        };
+      }
+
+      // Ensure default exercises remain intact
+      const presentIds = new Set(state.exercises.map(e => e.id));
+      DEFAULT_EXERCISES.forEach(defEx => {
+        if (!presentIds.has(defEx.id)) {
+          state.exercises.push(defEx);
+        }
+      });
+
+      saveState();
+      updateUnitLabels();
+      renderAll();
+      cancelPendingImport();
+      closeBackupModal();
+      showToast(`Backup restored (${mode === 'merge' ? 'merged' : 'overwritten'})!`, 'emerald');
+    }
+
+    function cancelPendingImport() {
+      pendingImportData = null;
+      const panel = document.getElementById('importConfirmPanel');
+      if (panel) panel.classList.add('hidden');
+    }
+
+    /**
+     * ============================================================================
+     * 8. BUILT-IN REST & ISOMETRIC INTERVAL COUNTDOWN TIMER + TONE.JS CHIME
+     * ============================================================================
+     */
+    function formatSeconds(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function playCompletionChime() {
+      try {
+        if (typeof Tone !== 'undefined') {
+          if (Tone.context.state !== 'running') Tone.start();
+          const synth = new Tone.Synth({
+            oscillator: { type: 'triangle' },
+            envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.4 }
+          }).toDestination();
+          const now = Tone.now();
+          synth.triggerAttackRelease('C5', '16n', now);
+          synth.triggerAttackRelease('E5', '16n', now + 0.12);
+          synth.triggerAttackRelease('G5', '8n', now + 0.24);
+        }
+      } catch (e) {
+        // Audio optional
+      }
+    }
+
+    function openTimerModal(seconds, label = 'Rest Timer', mode = 'REST') {
+      document.getElementById('timerModal').classList.remove('hidden');
+      startTimer(seconds, label, mode);
+    }
+
+    function closeTimerModal() {
+      document.getElementById('timerModal').classList.add('hidden');
+    }
+
+    function startTimer(seconds, label = 'Rest Timer', mode = 'REST') {
+      clearInterval(timerState.intervalId);
+      timerState.remainingSec = seconds;
+      timerState.totalSec = seconds;
+      timerState.label = label;
+      timerState.mode = mode;
+      timerState.isPaused = false;
+
+      document.getElementById('stickyTimerBar').classList.remove('hidden');
+      document.getElementById('headerTimerBadge').classList.remove('hidden');
+      updateTimerDisplays();
+
+      timerState.intervalId = setInterval(() => {
+        if (timerState.isPaused) return;
+        timerState.remainingSec--;
+        updateTimerDisplays();
+
+        if (timerState.remainingSec <= 0) {
+          clearInterval(timerState.intervalId);
+          playCompletionChime();
+          showToast(`${timerState.mode === 'ISOMETRIC' ? 'Isometric Hold Complete!' : 'Rest Complete — Next Set!'}`, 'emerald');
+          stopTimer();
+          closeTimerModal();
+        }
+      }, 1000);
+    }
+
+    function toggleTimerPause() {
+      timerState.isPaused = !timerState.isPaused;
+      updateTimerDisplays();
+    }
+
+    function stopTimer() {
+      clearInterval(timerState.intervalId);
+      timerState.intervalId = null;
+      document.getElementById('stickyTimerBar').classList.add('hidden');
+      document.getElementById('headerTimerBadge').classList.add('hidden');
+    }
+
+    function updateTimerDisplays() {
+      const formatted = formatSeconds(Math.max(0, timerState.remainingSec));
+      document.getElementById('stickyTimerClock').textContent = formatted;
+      document.getElementById('stickyTimerLabel').textContent = timerState.label;
+      document.getElementById('stickyTimerMode').textContent = timerState.mode;
+      document.getElementById('stickyPauseBtn').textContent = timerState.isPaused ? 'Resume' : 'Pause';
+
+      document.getElementById('modalTimerDisplay').textContent = formatted;
+      document.getElementById('modalTimerTitle').textContent = timerState.label;
+      document.getElementById('modalTimerBadge').textContent = timerState.mode;
+      document.getElementById('modalPauseBtn').textContent = timerState.isPaused ? 'Resume' : 'Pause';
+      document.getElementById('modalTimerSub').textContent = timerState.mode === 'ISOMETRIC'
+        ? 'Maintain maximal muscle tension & steady breathing'
+        : 'Recover ATP-PCr stores before your next working set';
+    }
+
+    /**
+     * Custom Non-Blocking Toast Notification (No alert() used)
+     */
+    function showToast(message, color = 'emerald') {
+      const container = document.getElementById('toastContainer');
+      const el = document.createElement('div');
+      const borderClass = color === 'amber' ? 'border-amber-500/50 text-amber-200' : 'border-emerald-500/50 text-emerald-200';
+      el.className = `px-4 py-3 rounded-xl bg-slate-900/95 border ${borderClass} text-xs font-bold shadow-2xl text-center transition-all duration-300`;
+      el.textContent = message;
+      container.appendChild(el);
+      setTimeout(() => {
+        el.style.opacity = '0';
+        setTimeout(() => el.remove(), 300);
+      }, 2800);
+    }
+
+    // Boot application on load
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
+```
