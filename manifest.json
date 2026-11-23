@@ -1,16 +1,17 @@
 {
   "name": "Fit4Less Iron & Science",
   "short_name": "Iron & Science",
-  "start_url": "./index.html",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0d0e12",
   "theme_color": "#0d0e12",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "[https://cdn-icons-png.flaticon.com/512/2964/2964514.png](https://cdn-icons-png.flaticon.com/512/2964/2964514.png)",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%23f59e0b'/%3E%3Cpath d='M140 160v192M372 160v192M85 205v102M427 205v102M140 256h232' stroke='%230d0e12' stroke-width='38' stroke-linecap='round'/%3E%3C/svg%3E",
       "sizes": "512x512",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]
