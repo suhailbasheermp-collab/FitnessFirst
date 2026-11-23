@@ -3,59 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0d0e12" />
+  <meta name="theme-color" content="#0b0c0e" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>Fit4Less • Iron & Science</title>
+  <title>Fit4Less • Volt Iron</title>
   <link rel="manifest" href="./manifest.json" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: #0d0e12; color: #f8fafc; overflow-x: hidden; }
-    .card-surface { background: #161821; border: 1px solid rgba(255,255,255,0.06); }
-    .card-elevated { background: #1d202b; border: 1px solid rgba(255,255,255,0.08); }
+    .font-display { font-family: 'Anton', Impact, sans-serif; letter-spacing: 0.02em; }
+    body { background-color: #0b0c0e; color: #f8fafc; overflow-x: hidden; }
+    .volt-bg { background-color: #d6ff00; color: #0b0c0e; }
+    .volt-text { color: #d6ff00; }
+    .volt-border { border-color: rgba(214, 255, 0, 0.35); }
+    .card-dark { background: #141619; border: 1px solid rgba(255,255,255,0.06); }
+    .card-mid { background: #1c1f24; border: 1px solid rgba(255,255,255,0.08); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-    .ring-transition { transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    /* Animated Northern Lights Aurora */
+    .aurora-box {
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse at bottom, #0f172a 0%, #090a0d 100%);
+    }
+    .aurora-ribbon {
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 25% 40%, rgba(16, 185, 129, 0.38), transparent 45%),
+        radial-gradient(circle at 70% 35%, rgba(214, 255, 0, 0.28), transparent 45%),
+        radial-gradient(circle at 50% 70%, rgba(139, 92, 246, 0.35), transparent 50%),
+        radial-gradient(circle at 80% 75%, rgba(6, 182, 212, 0.32), transparent 45%);
+      filter: blur(26px);
+      animation: auroraDrift 14s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .aurora-ribbon-2 {
+      position: absolute;
+      inset: -30%;
+      background:
+        conic-gradient(from 120deg at 50% 50%, rgba(52, 211, 153, 0.25), rgba(168, 85, 247, 0.22), rgba(214, 255, 0, 0.2), rgba(52, 211, 153, 0.25));
+      filter: blur(32px);
+      animation: auroraWave 19s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes auroraDrift {
+      0% { transform: translate(-6%, -4%) rotate(-4deg) scale(1); }
+      50% { transform: translate(5%, 3%) rotate(3deg) scale(1.12); }
+      100% { transform: translate(-3%, 6%) rotate(-2deg) scale(1.05); }
+    }
+    @keyframes auroraWave {
+      0% { transform: rotate(0deg) scale(1.1); }
+      50% { transform: rotate(180deg) scale(1.25); }
+      100% { transform: rotate(360deg) scale(1.1); }
+    }
   </style>
 </head>
 <body class="min-h-screen pb-28">
 
   <!-- Top Header -->
-  <header class="sticky top-0 z-30 bg-[#0d0e12]/90 backdrop-blur-md border-b border-white/5 px-4 py-3.5">
+  <header class="sticky top-0 z-30 bg-[#0b0c0e]/90 backdrop-blur-md border-b border-white/5 px-4 py-3">
     <div class="max-w-lg mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
-          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6.5 6.5v11M17.5 6.5v11M3 9v6M21 9v6M6.5 12h11" />
-          </svg>
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-full volt-bg flex items-center justify-center font-display text-lg tracking-tight">
+          F4L
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-base font-extrabold tracking-tight text-white">My Plan</h1>
-            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/25">Fit4Less</span>
-          </div>
-          <p class="text-[11px] text-slate-400 font-medium">45–60m Strength, Functional & Mobility</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Fit4Less • Performance</p>
+          <h1 class="text-sm font-extrabold tracking-tight text-white uppercase">Volume Up Your Body Goals</h1>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <button type="button" onclick="openBackupModal()" title="Backup & Restore" class="relative w-9 h-9 rounded-full card-surface flex items-center justify-center text-slate-300 hover:text-white active:scale-95 transition">
+        <button type="button" onclick="openBackupModal()" title="Backup & Restore" class="relative w-9 h-9 rounded-full card-dark flex items-center justify-center text-slate-300 hover:text-white active:scale-95 transition">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
           </svg>
-          <span id="saveDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span id="saveDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#d6ff00]"></span>
         </button>
 
-        <button type="button" id="unitBtn" onclick="toggleUnit()" class="h-9 px-3 rounded-full card-surface text-xs font-bold text-slate-200 hover:border-white/20 active:scale-95 transition">
+        <button type="button" id="unitBtn" onclick="toggleUnit()" class="h-9 px-3 rounded-full card-dark text-xs font-extrabold volt-text active:scale-95 transition">
           LBS
         </button>
 
-        <button type="button" onclick="openTimerModal(90, 'Rest Timer')" class="w-9 h-9 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 active:scale-95 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+        <button type="button" onclick="openTimerModal(90, 'Rest Timer')" class="w-9 h-9 rounded-full volt-bg flex items-center justify-center active:scale-95 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
             <circle cx="12" cy="13" r="8" />
             <path stroke-linecap="round" d="M12 9v4l2.5 2.5M9 2h6" />
           </svg>
@@ -64,104 +100,115 @@
     </div>
   </header>
 
-  <!-- Main Content Container -->
   <main class="max-w-lg mx-auto px-4 pt-4 space-y-5">
 
-    <!-- VIEW 1: PLAN & DASHBOARD -->
-    <section id="view-plan" class="space-y-5">
-      <div class="flex items-center justify-between">
-        <div>
-          <h2 class="text-lg font-bold text-white">Daily Plan</h2>
-          <p class="text-xs text-slate-400" id="dbStatusText">54 Fit4Less movements ready</p>
-        </div>
-        <div class="card-surface p-1 rounded-full flex items-center gap-1">
-          <button type="button" id="split4Btn" onclick="setSplitDays(4)" class="px-3 py-1 rounded-full text-xs font-bold transition bg-amber-500 text-slate-950">4-Day</button>
-          <button type="button" id="split5Btn" onclick="setSplitDays(5)" class="px-3 py-1 rounded-full text-xs font-bold transition text-slate-400 hover:text-white">5-Day</button>
-        </div>
-      </div>
-
-      <!-- 2x2 Metric Grid -->
-      <div class="grid grid-cols-2 gap-3">
-        <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">Session Time</span>
-            <div class="w-8 h-8 rounded-full bg-orange-500/15 flex items-center justify-center text-orange-400">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5 2c-1.1 2.7-1.2 4.6-.2 6.5.9 1.6.8 3.2-.3 4.3-1 1-2.6.8-3.4-.4-.5-.8-.6-1.8-.3-2.9C6.8 11 5.5 13.5 5.5 16c0 3.6 2.9 6.5 6.5 6.5s6.5-2.9 6.5-6.5c0-4.4-2.8-8.1-5-14z"/></svg>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span class="text-2xl font-extrabold text-white">52</span>
-            <span class="text-xs text-slate-400 font-medium ml-1">min avg</span>
-          </div>
-        </div>
-
-        <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">Total Volume</span>
-            <div class="w-8 h-8 rounded-full bg-purple-500/15 flex items-center justify-center text-purple-400">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span id="dashTotalVolume" class="text-2xl font-extrabold text-white">0</span>
-            <span id="dashVolumeUnit" class="text-xs text-slate-400 font-medium ml-1">lbs</span>
-          </div>
-        </div>
-
-        <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">Sessions Done</span>
-            <div class="w-8 h-8 rounded-full bg-emerald-500/15 flex items-center justify-center text-emerald-400">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span id="dashSessionsDone" class="text-2xl font-extrabold text-white">0</span>
-            <span class="text-xs text-slate-400 font-medium ml-1">completed</span>
-          </div>
-        </div>
-
-        <div class="card-surface rounded-3xl p-4 flex flex-col justify-between">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-slate-400">Exercise Pool</span>
-            <div class="w-8 h-8 rounded-full bg-sky-500/15 flex items-center justify-center text-sky-400">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-            </div>
-          </div>
-          <div class="mt-3">
-            <span id="dashDbCount" class="text-2xl font-extrabold text-white">54</span>
-            <span class="text-xs text-slate-400 font-medium ml-1">movements</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Weekly Schedule Cards -->
-      <div class="space-y-3">
+    <!-- NORTHERN LIGHTS + 1000+ PROFOUND QUOTES ENGINE -->
+    <section onclick="nextProfoundQuote()" class="aurora-box rounded-3xl p-5 border border-white/10 cursor-pointer select-none shadow-2xl">
+      <div class="aurora-ribbon"></div>
+      <div class="aurora-ribbon-2"></div>
+      <div class="relative z-10 space-y-2.5">
         <div class="flex items-center justify-between">
-          <h3 class="text-base font-bold text-white">Weekly Rotation</h3>
-          <span class="text-xs text-slate-400">Tap play to train • Shuffle for variety</span>
+          <span class="text-[10px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-white/10 text-emerald-300 backdrop-blur-sm">
+            Aurora Reflection #<span id="quoteNumber">001</span>
+          </span>
+          <span class="text-[10px] font-semibold text-slate-300/80">Tap for next insight ↻</span>
         </div>
-        <div id="scheduleList" class="space-y-3"></div>
+        <p id="profoundQuoteText" class="text-sm sm:text-base font-semibold text-white leading-relaxed tracking-tight drop-shadow">
+          "Discipline is the quiet architecture that turns fleeting intention into permanent strength."
+        </p>
+        <p id="profoundQuoteTag" class="text-[11px] font-bold uppercase tracking-wider volt-text opacity-90">
+          — Stoic Iron • 1,200+ Deep Reflections
+        </p>
       </div>
     </section>
 
-    <!-- VIEW 2: ACTIVE WORKOUT SESSION -->
+    <!-- VIEW 1: DASHBOARD & WEEKLY DAY CUSTOMIZER -->
+    <section id="view-plan" class="space-y-5">
+
+      <!-- 3-Column Stat Row (Reference Style) -->
+      <div class="grid grid-cols-3 gap-2.5">
+        <div class="card-dark rounded-2xl p-3.5 text-center">
+          <p id="dashTotalVolume" class="text-lg font-extrabold text-white">0</p>
+          <p id="dashVolumeUnit" class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mt-0.5">Total LBS</p>
+        </div>
+        <div class="card-dark rounded-2xl p-3.5 text-center">
+          <p id="dashSessionsDone" class="text-lg font-extrabold volt-text">0</p>
+          <p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mt-0.5">Sessions</p>
+        </div>
+        <div class="card-dark rounded-2xl p-3.5 text-center">
+          <p id="dashDbCount" class="text-lg font-extrabold text-white">54</p>
+          <p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mt-0.5">Movements</p>
+        </div>
+      </div>
+
+      <!-- Vertical Activity Bar Chart Card (Reference Style) -->
+      <div class="card-dark rounded-3xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Weekly Split Architecture</span>
+            <h2 class="text-base font-extrabold text-white uppercase">Training Split & Load</h2>
+          </div>
+          <div class="bg-[#0b0c0e] p-1 rounded-full flex items-center gap-1 border border-white/10">
+            <button type="button" id="split4Btn" onclick="setSplitDays(4)" class="px-3 py-1 rounded-full text-xs font-extrabold transition volt-bg">4-Day</button>
+            <button type="button" id="split5Btn" onclick="setSplitDays(5)" class="px-3 py-1 rounded-full text-xs font-extrabold transition text-slate-400 hover:text-white">5-Day</button>
+          </div>
+        </div>
+
+        <!-- 7-Bar Visual Chart -->
+        <div class="grid grid-cols-7 gap-2 items-end h-24 pt-2 px-1" id="weeklyBarChart"></div>
+      </div>
+
+      <!-- Featured Selected Day Card + Pill CTA (Reference Style) -->
+      <div class="card-dark rounded-3xl p-5 relative overflow-hidden border volt-border">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-[10px] font-extrabold uppercase tracking-widest volt-text">Selected Day Blueprint</span>
+          <button type="button" onclick="rotateDayExercises(selectedPlanDay)" class="text-[11px] font-bold text-slate-300 hover:text-white flex items-center gap-1">
+            ↻ Shuffle Day <span id="shuffleDayNum">1</span>
+          </button>
+        </div>
+
+        <h3 id="featuredDayTitle" class="font-display text-2xl text-white uppercase tracking-wide">UPPER BODY COMPOUND STRENGTH</h3>
+        <p id="featuredDayFocus" class="text-xs text-slate-400 mt-0.5">Bench Press • Weighted Pull-Ups • OHP • Core</p>
+
+        <!-- Day Selector Pills -->
+        <div id="daySelectorPills" class="flex gap-2 overflow-x-auto no-scrollbar my-4"></div>
+
+        <!-- Editable Exercise List for Selected Day (Add or Remove per Day) -->
+        <div class="space-y-2 mb-4">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Day <span id="selectedDayLabelNum">1</span> Lineup (<span id="selectedDayCount">8</span>)</span>
+            <button type="button" onclick="openQuickAddToDayModal(selectedPlanDay)" class="text-xs font-extrabold volt-text hover:underline">
+              + Add Movement
+            </button>
+          </div>
+          <div id="selectedDayExerciseList" class="space-y-2"></div>
+        </div>
+
+        <!-- Full-Width Volt Pill CTA Button -->
+        <button type="button" onclick="startSession(selectedPlanDay)" class="w-full py-3.5 rounded-full volt-bg font-extrabold text-xs uppercase tracking-widest shadow-lg shadow-[#d6ff00]/20 active:scale-[0.99] transition">
+          START BUILDING YOUR BODY • DAY <span id="ctaDayNum">1</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 2: ACTIVE WORKOUT SESSION (Reference Right Screen Style) -->
     <section id="view-workout" class="hidden space-y-4">
-      <div class="card-surface rounded-3xl p-4 flex items-center justify-between">
+      <div class="card-dark rounded-3xl p-4 flex items-center justify-between border volt-border">
         <div>
-          <span id="activeDayBadge" class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Day 1</span>
-          <h2 id="activeDayTitle" class="text-lg font-extrabold text-white leading-tight mt-0.5">Upper Body Strength</h2>
-          <p id="activeDayMeta" class="text-xs text-slate-400 mt-0.5">8 Exercises • ~55 min</p>
+          <span id="activeDayBadge" class="text-[10px] font-extrabold uppercase tracking-widest volt-text">DAY 1</span>
+          <h2 id="activeDayTitle" class="font-display text-xl text-white uppercase tracking-wide mt-0.5">UPPER BODY STRENGTH</h2>
+          <p id="activeDayMeta" class="text-xs text-slate-400">8 Exercises • ~52 min</p>
         </div>
         <div class="flex items-center gap-2">
-          <button type="button" onclick="openQuickAddToDayModal()" class="px-3 py-2 rounded-2xl card-elevated text-xs font-bold text-slate-200 hover:text-white active:scale-95 transition">
-            + Exercise
+          <button type="button" onclick="openQuickAddToDayModal(activeDayIndex)" class="px-3 py-2 rounded-full card-mid text-xs font-bold text-white active:scale-95 transition">
+            + Add
           </button>
-          <button type="button" onclick="finishWorkoutSession()" class="px-3.5 py-2 rounded-2xl bg-emerald-500 text-slate-950 text-xs font-extrabold shadow-lg shadow-emerald-500/20 active:scale-95 transition">
+          <button type="button" onclick="finishWorkoutSession()" class="px-4 py-2 rounded-full volt-bg text-xs font-extrabold uppercase tracking-wider active:scale-95 transition">
             Finish
           </button>
         </div>
       </div>
+
       <div id="activeExercisesContainer" class="space-y-3.5"></div>
     </section>
 
@@ -169,29 +216,29 @@
     <section id="view-library" class="hidden space-y-4">
       <div class="flex items-center justify-between">
         <div>
-          <h2 class="text-lg font-bold text-white">Workout Database</h2>
-          <p class="text-xs text-slate-400">Add custom exercises or browse movements</p>
+          <h2 class="font-display text-xl text-white uppercase tracking-wide">WORKOUT DATABASE</h2>
+          <p class="text-xs text-slate-400">Create custom lifts or assign to any day</p>
         </div>
-        <button type="button" onclick="toggleAddExerciseForm()" class="px-3.5 py-2 rounded-full bg-amber-500 text-slate-950 text-xs font-extrabold shadow-lg shadow-amber-500/20 active:scale-95 transition">
+        <button type="button" onclick="toggleAddExerciseForm()" class="px-4 py-2 rounded-full volt-bg text-xs font-extrabold uppercase tracking-wider active:scale-95 transition">
           + New Workout
         </button>
       </div>
 
-      <form id="customExerciseForm" onsubmit="saveCustomExercise(event)" class="hidden card-surface rounded-3xl p-4 space-y-3.5 border border-amber-500/30">
+      <form id="customExerciseForm" onsubmit="saveCustomExercise(event)" class="hidden card-dark rounded-3xl p-4 space-y-3.5 border volt-border">
         <div class="flex items-center justify-between">
-          <h3 class="text-sm font-bold text-amber-400">Add Custom Workout to Database</h3>
+          <h3 class="text-xs font-extrabold uppercase tracking-wider volt-text">Add Custom Movement</h3>
           <button type="button" onclick="toggleAddExerciseForm()" class="text-xs text-slate-400 hover:text-white">Cancel</button>
         </div>
 
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 mb-1">Exercise Name *</label>
-          <input id="custName" type="text" required placeholder="e.g., Landmine Press, Copenhagen Plank..." class="w-full px-3.5 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input id="custName" type="text" required placeholder="e.g., Landmine Press, Copenhagen Plank..." class="w-full px-3.5 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none focus:border-[#d6ff00]" />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-[11px] font-semibold text-slate-400 mb-1">Muscle Group</label>
-            <select id="custMuscle" class="w-full px-3 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white focus:outline-none focus:border-amber-500">
+            <select id="custMuscle" class="w-full px-3 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none">
               <option value="Chest">Chest</option>
               <option value="Back">Back</option>
               <option value="Legs">Legs</option>
@@ -204,7 +251,7 @@
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-slate-400 mb-1">Workout Type</label>
-            <select id="custType" class="w-full px-3 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white focus:outline-none focus:border-amber-500">
+            <select id="custType" class="w-full px-3 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none">
               <option value="Compound">Compound</option>
               <option value="Hypertrophy">Hypertrophy</option>
               <option value="Functional">Functional</option>
@@ -217,57 +264,57 @@
         <div class="grid grid-cols-3 gap-2.5">
           <div>
             <label class="block text-[11px] font-semibold text-slate-400 mb-1">Tracking</label>
-            <select id="custMode" class="w-full px-2.5 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-xs text-white focus:outline-none focus:border-amber-500">
+            <select id="custMode" class="w-full px-2.5 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-xs text-white focus:outline-none">
               <option value="reps">Weight + Reps</option>
               <option value="time">Timed (Sec)</option>
             </select>
           </div>
           <div>
-            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Default Sets</label>
-            <input id="custSets" type="number" min="1" max="10" value="3" class="w-full px-3 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white focus:outline-none focus:border-amber-500" />
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Sets</label>
+            <input id="custSets" type="number" min="1" max="10" value="3" class="w-full px-3 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none" />
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-slate-400 mb-1">Target</label>
-            <input id="custTarget" type="text" value="8-12" placeholder="8-12 or 45s" class="w-full px-3 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white focus:outline-none focus:border-amber-500" />
+            <input id="custTarget" type="text" value="8-12" placeholder="8-12 or 45s" class="w-full px-3 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none" />
           </div>
         </div>
 
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 mb-1">Equipment / Cue</label>
-          <input id="custEquip" type="text" placeholder="e.g., Cables, Dumbbells, Kettlebell, Mat" class="w-full px-3.5 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white focus:outline-none focus:border-amber-500" />
+          <input id="custEquip" type="text" placeholder="e.g., Cables, Dumbbells, Kettlebell" class="w-full px-3.5 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none" />
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Auto-Add to Weekly Schedule Day</label>
-          <select id="custScheduleDay" class="w-full px-3 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white focus:outline-none focus:border-amber-500">
-            <option value="-1">Database Only (Available in Rotation)</option>
+          <label class="block text-[11px] font-semibold text-slate-400 mb-1">Assign to Weekly Day</label>
+          <select id="custScheduleDay" class="w-full px-3 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none">
+            <option value="-1">Database Only</option>
             <option value="0">Add to Day 1</option>
             <option value="1">Add to Day 2</option>
             <option value="2">Add to Day 3</option>
             <option value="3">Add to Day 4</option>
-            <option value="4">Add to Day 5 (5-Day Split)</option>
+            <option value="4">Add to Day 5</option>
           </select>
         </div>
 
-        <button type="submit" class="w-full py-3 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-sm shadow-lg shadow-amber-500/20 active:scale-[0.99] transition">
+        <button type="submit" class="w-full py-3 rounded-full volt-bg font-extrabold text-xs uppercase tracking-widest">
           Save Workout to Database
         </button>
       </form>
 
-      <input id="libSearch" oninput="renderLibrary()" type="text" placeholder="Search bench, deadlift, pull-up, isometric, mobility..." class="w-full px-4 py-3 rounded-2xl card-surface text-sm text-white placeholder-slate-500 focus:outline-none focus:border-amber-500" />
+      <input id="libSearch" oninput="renderLibrary()" type="text" placeholder="Search bench, deadlift, pull-up, isometric, mobility..." class="w-full px-4 py-3 rounded-2xl card-dark text-sm text-white placeholder-slate-500 focus:outline-none focus:border-[#d6ff00]" />
 
       <div id="libFilters" class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-        <button type="button" onclick="setLibFilter('All')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500 text-slate-950 whitespace-nowrap">All</button>
-        <button type="button" onclick="setLibFilter('Compound')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Compound</button>
-        <button type="button" onclick="setLibFilter('Functional')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Functional</button>
-        <button type="button" onclick="setLibFilter('Isometric')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Isometric</button>
-        <button type="button" onclick="setLibFilter('Mobility')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Mobility</button>
-        <button type="button" onclick="setLibFilter('Chest')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Chest</button>
-        <button type="button" onclick="setLibFilter('Back')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Back</button>
-        <button type="button" onclick="setLibFilter('Legs')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Legs</button>
-        <button type="button" onclick="setLibFilter('Shoulders')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Shoulders</button>
-        <button type="button" onclick="setLibFilter('Arms')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Arms</button>
-        <button type="button" onclick="setLibFilter('Core')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap">Core</button>
+        <button type="button" onclick="setLibFilter('All')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-extrabold volt-bg whitespace-nowrap">All</button>
+        <button type="button" onclick="setLibFilter('Compound')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Compound</button>
+        <button type="button" onclick="setLibFilter('Functional')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Functional</button>
+        <button type="button" onclick="setLibFilter('Isometric')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Isometric</button>
+        <button type="button" onclick="setLibFilter('Mobility')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Mobility</button>
+        <button type="button" onclick="setLibFilter('Chest')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Chest</button>
+        <button type="button" onclick="setLibFilter('Back')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Back</button>
+        <button type="button" onclick="setLibFilter('Legs')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Legs</button>
+        <button type="button" onclick="setLibFilter('Shoulders')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Shoulders</button>
+        <button type="button" onclick="setLibFilter('Arms')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Arms</button>
+        <button type="button" onclick="setLibFilter('Core')" class="lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap">Core</button>
       </div>
 
       <div id="libraryList" class="space-y-2.5"></div>
@@ -275,99 +322,33 @@
 
     <!-- VIEW 4: PROGRESS & ANALYTICS -->
     <section id="view-progress" class="hidden space-y-4">
-      <h2 class="text-lg font-bold text-white">Performance & Progression</h2>
+      <h2 class="font-display text-xl text-white uppercase tracking-wide">PROGRESSION & RECORDS</h2>
 
-      <div class="card-surface rounded-3xl p-5 flex flex-col items-center">
-        <div class="w-full flex items-center justify-between mb-2">
-          <span class="text-xs font-semibold text-slate-400">Weekly Consistency Goal</span>
-          <span id="ringPercentLabel" class="text-xs font-bold text-amber-400">0%</span>
-        </div>
-
-        <div class="flex items-center justify-around w-full my-2">
-          <div class="text-center">
-            <p id="statTotalSets" class="text-lg font-extrabold text-white">0</p>
-            <p class="text-[11px] text-slate-400">Total Sets</p>
-          </div>
-
-          <div class="relative w-36 h-36 flex items-center justify-center">
-            <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="50" fill="none" stroke="#252836" stroke-width="11" />
-              <circle id="progressRingCircle" class="ring-transition" cx="60" cy="60" r="50" fill="none" stroke="url(#amberGrad)" stroke-width="11" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" />
-              <defs>
-                <linearGradient id="amberGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#f59e0b" />
-                  <stop offset="100%" stop-color="#ea580c" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-center">
-              <span id="ringMainValue" class="text-2xl font-extrabold text-white">0/4</span>
-              <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">This Week</span>
-            </div>
-          </div>
-
-          <div class="text-center">
-            <p id="statPrCount" class="text-lg font-extrabold text-white">0</p>
-            <p class="text-[11px] text-slate-400">Tracked Lifts</p>
-          </div>
-        </div>
-
-        <div class="w-full grid grid-cols-3 gap-3 pt-3 mt-2 border-t border-white/5">
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-slate-400">Push</span>
-              <span id="barPushText" class="font-bold text-white">0</span>
-            </div>
-            <div class="h-1.5 rounded-full bg-[#252836] overflow-hidden">
-              <div id="barPushFill" class="h-full bg-amber-400 rounded-full" style="width: 0%"></div>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-slate-400">Pull</span>
-              <span id="barPullText" class="font-bold text-white">0</span>
-            </div>
-            <div class="h-1.5 rounded-full bg-[#252836] overflow-hidden">
-              <div id="barPullFill" class="h-full bg-emerald-400 rounded-full" style="width: 0%"></div>
-            </div>
-          </div>
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-slate-400">Legs/Core</span>
-              <span id="barLegsText" class="font-bold text-white">0</span>
-            </div>
-            <div class="h-1.5 rounded-full bg-[#252836] overflow-hidden">
-              <div id="barLegsFill" class="h-full bg-purple-400 rounded-full" style="width: 0%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-surface rounded-3xl p-4 space-y-3">
+      <div class="card-dark rounded-3xl p-4 space-y-3">
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-sm font-bold text-white">JSON Backup & Restore</h3>
-            <p id="backupLastExportText" class="text-[11px] text-slate-400">Auto-saved locally • Export anytime</p>
+            <p id="backupLastExportText" class="text-[11px] text-slate-400">Auto-saved on device • Export anytime</p>
           </div>
-          <span class="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-400 text-[10px] font-bold">Protected</span>
+          <span class="px-2.5 py-1 rounded-full bg-[#d6ff00]/15 volt-text text-[10px] font-extrabold uppercase">Active</span>
         </div>
         <div class="grid grid-cols-2 gap-2.5">
-          <button type="button" onclick="exportBackupJSON()" class="py-2.5 px-3 rounded-2xl bg-amber-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition">
+          <button type="button" onclick="exportBackupJSON()" class="py-2.5 px-3 rounded-full volt-bg font-extrabold text-xs uppercase tracking-wider active:scale-95 transition">
             Export JSON
           </button>
-          <button type="button" onclick="triggerImportFile()" class="py-2.5 px-3 rounded-2xl card-elevated text-white font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition">
+          <button type="button" onclick="triggerImportFile()" class="py-2.5 px-3 rounded-full card-mid text-white font-bold text-xs uppercase tracking-wider active:scale-95 transition">
             Import JSON
           </button>
         </div>
       </div>
 
       <div class="space-y-2.5">
-        <h3 class="text-sm font-bold text-white">Lift & Isometric Progression</h3>
+        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Personal Records</h3>
         <div id="prListContainer" class="space-y-2"></div>
       </div>
 
       <div class="space-y-2.5">
-        <h3 class="text-sm font-bold text-white">Recent Completed Sessions</h3>
+        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Session History</h3>
         <div id="historyListContainer" class="space-y-2"></div>
       </div>
     </section>
@@ -377,93 +358,147 @@
   <input type="file" id="importFileInput" accept=".json,application/json" class="hidden" onchange="handleImportFileSelect(event)" />
 
   <!-- Bottom Navigation Bar -->
-  <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#12141c]/95 backdrop-blur-md border-t border-white/5 px-4 py-2.5">
+  <nav class="fixed bottom-0 inset-x-0 z-30 bg-[#0b0c0e]/95 backdrop-blur-md border-t border-white/5 px-4 py-2.5">
     <div class="max-w-lg mx-auto grid grid-cols-4 gap-1">
-      <button type="button" onclick="switchTab('plan')" id="nav-plan" class="nav-btn flex flex-col items-center gap-1 py-1 text-amber-400">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-        <span class="text-[10px] font-bold">Plan</span>
+      <button type="button" onclick="switchTab('plan')" id="nav-plan" class="nav-btn flex flex-col items-center gap-1 py-1 volt-text">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <span class="text-[10px] font-extrabold uppercase">Plan</span>
       </button>
       <button type="button" onclick="switchTab('workout')" id="nav-workout" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span class="text-[10px] font-bold">Train</span>
+        <span class="text-[10px] font-bold uppercase">Train</span>
       </button>
       <button type="button" onclick="switchTab('library')" id="nav-library" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-        <span class="text-[10px] font-bold">Library</span>
+        <span class="text-[10px] font-bold uppercase">Library</span>
       </button>
       <button type="button" onclick="switchTab('progress')" id="nav-progress" class="nav-btn flex flex-col items-center gap-1 py-1 text-slate-400">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-        <span class="text-[10px] font-bold">Stats</span>
+        <span class="text-[10px] font-bold uppercase">Stats</span>
       </button>
     </div>
   </nav>
 
-  <!-- MODAL: TIMER -->
-  <div id="timerModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-    <div class="card-surface w-full max-w-sm rounded-3xl p-6 space-y-5 border border-white/10">
+  <!-- MODAL: VOLT TIMER HUD (Reference Right Screen Style) -->
+  <div id="timerModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-4">
+    <div class="card-dark w-full max-w-sm rounded-3xl p-6 space-y-6 border volt-border text-center">
       <div class="flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400">Interval / Rest</span>
-          <h3 id="timerTitle" class="text-base font-extrabold text-white">Rest Timer</h3>
-        </div>
-        <button type="button" onclick="closeTimerModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400 hover:text-white">✕</button>
+        <span class="text-[10px] font-extrabold uppercase tracking-widest volt-text">Active Countdown</span>
+        <button type="button" onclick="closeTimerModal()" class="w-8 h-8 rounded-full card-mid flex items-center justify-center text-slate-400 hover:text-white">✕</button>
       </div>
-      <div class="text-center py-4">
-        <div id="timerDisplay" class="text-5xl font-extrabold tracking-tight text-white tabular-nums">01:30</div>
+
+      <div>
+        <h3 id="timerTitle" class="text-sm font-bold text-slate-300 uppercase tracking-wider">Rest Timer</h3>
+        <div id="timerDisplay" class="font-display text-6xl text-white tracking-wider mt-2 tabular-nums">01:30</div>
       </div>
+
       <div class="grid grid-cols-4 gap-2">
-        <button type="button" onclick="setTimerSeconds(30)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">30s</button>
-        <button type="button" onclick="setTimerSeconds(45)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">45s</button>
-        <button type="button" onclick="setTimerSeconds(90)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">90s</button>
-        <button type="button" onclick="setTimerSeconds(150)" class="py-2 rounded-xl card-elevated text-xs font-bold text-slate-200">2m30</button>
+        <button type="button" onclick="setTimerSeconds(30)" class="py-2 rounded-full card-mid text-xs font-bold text-slate-200">30s</button>
+        <button type="button" onclick="setTimerSeconds(45)" class="py-2 rounded-full card-mid text-xs font-bold text-slate-200">45s</button>
+        <button type="button" onclick="setTimerSeconds(90)" class="py-2 rounded-full card-mid text-xs font-bold text-slate-200">90s</button>
+        <button type="button" onclick="setTimerSeconds(150)" class="py-2 rounded-full card-mid text-xs font-bold text-slate-200">2m30</button>
       </div>
-      <div class="grid grid-cols-2 gap-3">
-        <button type="button" id="timerToggleBtn" onclick="toggleTimerRunning()" class="py-3 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-sm">Pause</button>
-        <button type="button" onclick="resetTimer()" class="py-3 rounded-2xl card-elevated text-white font-bold text-sm">Reset</button>
+
+      <div class="flex items-center justify-center gap-5 pt-1">
+        <button type="button" onclick="resetTimer()" class="w-12 h-12 rounded-full card-mid text-xs font-bold text-slate-300">Reset</button>
+        <button type="button" id="timerToggleBtn" onclick="toggleTimerRunning()" class="w-16 h-16 rounded-full volt-bg font-extrabold text-sm uppercase shadow-lg shadow-[#d6ff00]/30">Pause</button>
+        <button type="button" onclick="closeTimerModal()" class="w-12 h-12 rounded-full card-mid text-xs font-bold text-slate-300">Done</button>
       </div>
     </div>
   </div>
 
   <!-- MODAL: BACKUP -->
-  <div id="backupModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-    <div class="card-surface w-full max-w-sm rounded-3xl p-5 space-y-4 border border-white/10">
+  <div id="backupModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-4">
+    <div class="card-dark w-full max-w-sm rounded-3xl p-5 space-y-4 border volt-border">
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-extrabold text-white">Backup & Restore</h3>
-        <button type="button" onclick="closeBackupModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400">✕</button>
+        <h3 class="text-base font-extrabold text-white uppercase">Backup & Restore</h3>
+        <button type="button" onclick="closeBackupModal()" class="w-8 h-8 rounded-full card-mid flex items-center justify-center text-slate-400">✕</button>
       </div>
-      <p class="text-xs text-slate-400 leading-relaxed">
-        Your sets, progression PRs, and custom exercises save automatically on this device. Export a JSON file anytime to keep a portable backup.
-      </p>
-      <div id="modalBackupMeta" class="p-3 rounded-2xl bg-[#0d0e12] text-xs text-slate-300 space-y-1"></div>
-      <div id="importPreviewBox" class="hidden p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-2.5">
-        <p id="importPreviewText" class="text-xs text-amber-200 font-medium"></p>
+      <div id="modalBackupMeta" class="p-3.5 rounded-2xl bg-[#0b0c0e] text-xs text-slate-300 space-y-1"></div>
+      <div id="importPreviewBox" class="hidden p-3 rounded-2xl bg-[#d6ff00]/10 border volt-border space-y-2.5">
+        <p id="importPreviewText" class="text-xs text-white font-medium"></p>
         <div class="grid grid-cols-2 gap-2">
-          <button type="button" onclick="confirmImport('overwrite')" class="py-2 rounded-xl bg-amber-500 text-slate-950 text-xs font-extrabold">Overwrite All</button>
-          <button type="button" onclick="confirmImport('merge')" class="py-2 rounded-xl card-elevated text-white text-xs font-bold">Merge Data</button>
+          <button type="button" onclick="confirmImport('overwrite')" class="py-2 rounded-full volt-bg text-xs font-extrabold">Overwrite All</button>
+          <button type="button" onclick="confirmImport('merge')" class="py-2 rounded-full card-mid text-white text-xs font-bold">Merge Data</button>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-2.5 pt-1">
-        <button type="button" onclick="exportBackupJSON()" class="py-3 rounded-2xl bg-amber-500 text-slate-950 font-extrabold text-xs">Export JSON</button>
-        <button type="button" onclick="triggerImportFile()" class="py-3 rounded-2xl card-elevated text-white font-bold text-xs">Import JSON</button>
+        <button type="button" onclick="exportBackupJSON()" class="py-3 rounded-full volt-bg font-extrabold text-xs uppercase">Export JSON</button>
+        <button type="button" onclick="triggerImportFile()" class="py-3 rounded-full card-mid text-white font-bold text-xs uppercase">Import JSON</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: QUICK ADD -->
-  <div id="quickAddModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
-    <div class="card-surface w-full max-w-md rounded-3xl p-5 space-y-3 border border-white/10 max-h-[80vh] flex flex-col">
+  <!-- MODAL: ADD EXERCISE TO SELECTED DAY -->
+  <div id="quickAddModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-end sm:items-center justify-center p-4">
+    <div class="card-dark w-full max-w-md rounded-3xl p-5 space-y-3 border volt-border max-h-[82vh] flex flex-col">
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-extrabold text-white">Add Exercise to Session</h3>
-        <button type="button" onclick="closeQuickAddModal()" class="w-8 h-8 rounded-full card-elevated flex items-center justify-center text-slate-400">✕</button>
+        <h3 class="text-sm font-extrabold text-white uppercase">Add Movement to Day <span id="quickAddTargetDayLabel">1</span></h3>
+        <button type="button" onclick="closeQuickAddModal()" class="w-8 h-8 rounded-full card-mid flex items-center justify-center text-slate-400">✕</button>
       </div>
-      <input id="quickAddSearch" oninput="renderQuickAddList()" type="text" placeholder="Search database..." class="w-full px-3.5 py-2.5 rounded-2xl bg-[#0d0e12] border border-white/10 text-sm text-white" />
+      <input id="quickAddSearch" oninput="renderQuickAddList()" type="text" placeholder="Filter by bench, pull-up, squat, isometric..." class="w-full px-3.5 py-2.5 rounded-2xl bg-[#0b0c0e] border border-white/10 text-sm text-white focus:outline-none focus:border-[#d6ff00]" />
       <div id="quickAddList" class="overflow-y-auto space-y-2 pr-1 flex-1"></div>
     </div>
   </div>
 
-  <div id="toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full bg-emerald-500 text-slate-950 text-xs font-extrabold shadow-xl"></div>
+  <div id="toast" class="hidden fixed top-16 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-full volt-bg text-xs font-extrabold uppercase tracking-wider shadow-xl"></div>
 
   <script>
+    // 1,200+ Combinatorial Deep Philosophical & Stoic Reflections Generator
+    const QUOTE_OPENERS = [
+      "True mastery", "Quiet discipline", "Enduring strength", "Self-command", "Intentional effort",
+      "The iron you lift", "Your daily standard", "Unseen preparation", "Courage under tension", "Clarity of mind",
+      "A resilient spirit", "Patient persistence"
+    ];
+    const QUOTE_BRIDGES = [
+      "is forged in the moments when nobody is watching,",
+      "strips away every excuse you once thought was permanent,",
+      "transforms resistance from an obstacle into your greatest teacher,",
+      "proves that small, unglamorous repetitions rewrite your destiny,",
+      "teaches the nervous system to remain calm inside discomfort,",
+      "builds an unshakable foundation that chaos cannot erode,",
+      "separates those who merely wish from those who deliberately become,",
+      "turns every heavy rep into a silent vow kept to yourself,",
+      "reveals that your true ceiling was only an untested assumption,",
+      "aligns body, breath, and focus into a single sharp instrument,"
+    ];
+    const QUOTE_CLOSERS = [
+      "leaving behind a stronger human than yesterday.",
+      "because character is earned one deliberate choice at a time.",
+      "and peace follows the mind that governs itself.",
+      "until excellence becomes your natural baseline.",
+      "for the storm never breaks what has already been tempered.",
+      "proving that consistency outlasts raw emotion every single time.",
+      "and every drop of effort echoes far beyond the gym floor.",
+      "where stillness and power coexist in complete balance.",
+      "so you walk into every arena already victorious within.",
+      "turning fleeting motivation into lifelong armor."
+    ];
+    const QUOTE_THEMES = ["Stoic Iron", "Mind & Body", "Deep Focus", "Inner Architecture", "Resilience"];
+
+    function generateProfoundQuote(index) {
+      const o = QUOTE_OPENERS[index % QUOTE_OPENERS.length];
+      const b = QUOTE_BRIDGES[Math.floor(index / QUOTE_OPENERS.length) % QUOTE_BRIDGES.length];
+      const c = QUOTE_CLOSERS[Math.floor(index / (QUOTE_OPENERS.length * QUOTE_BRIDGES.length)) % QUOTE_CLOSERS.length];
+      const theme = QUOTE_THEMES[index % QUOTE_THEMES.length];
+      return {
+        num: String(index + 1).padStart(4, "0"),
+        text: `"${o} ${b} ${c}"`,
+        tag: `— ${theme} • Reflection ${index + 1} of 1,200`
+      };
+    }
+
+    let currentQuoteIdx = Math.floor(Math.random() * 1200);
+
+    function nextProfoundQuote() {
+      currentQuoteIdx = (currentQuoteIdx + 1 + Math.floor(Math.random() * 37)) % 1200;
+      const q = generateProfoundQuote(currentQuoteIdx);
+      document.getElementById("quoteNumber").textContent = q.num;
+      document.getElementById("profoundQuoteText").textContent = q.text;
+      document.getElementById("profoundQuoteTag").textContent = q.tag;
+    }
+
+    // Complete 54-Movement Fit4Less Database
     const FALLBACK_EXERCISES = [
       { id: "c1", name: "Barbell Flat Bench Press", muscle: "Chest", type: "Compound", mode: "reps", equip: "Barbell + Bench", sets: 4, target: "6-8", rest: 150, science: "High mechanical tension across sternal pectoralis; primary horizontal push overload." },
       { id: "c2", name: "Incline Dumbbell Press (30°)", muscle: "Chest", type: "Compound", mode: "reps", equip: "Dumbbells + Incline Bench", sets: 3, target: "8-12", rest: 120, science: "30° bench angle maximizes clavicular upper-pec recruitment while reducing front delt strain." },
@@ -554,7 +589,9 @@
     };
 
     let EXERCISE_DB = [...FALLBACK_EXERCISES];
+    let selectedPlanDay = 0;
     let activeDayIndex = 0;
+    let quickAddTargetDay = 0;
     let currentSessionSets = {};
     let libFilter = "All";
     let pendingImportData = null;
@@ -567,6 +604,7 @@
     function initApp() {
       loadState();
       ensureSchedulesInitialized();
+      nextProfoundQuote();
       updateHeaderUI();
       renderPlanView();
       renderLibrary();
@@ -576,8 +614,6 @@
     }
 
     async function loadExternalExercisesJSON() {
-      const statusEl = document.getElementById("dbStatusText");
-      statusEl.textContent = `${getAllExercises().length} Fit4Less movements ready`;
       try {
         const res = await fetch("./exercises.json", { cache: "no-cache" });
         if (res.ok) {
@@ -587,7 +623,6 @@
             FALLBACK_EXERCISES.forEach(ex => map.set(ex.id, ex));
             externalList.forEach(ex => { if (ex.id && ex.name) map.set(ex.id, ex); });
             EXERCISE_DB = Array.from(map.values());
-            statusEl.textContent = `${getAllExercises().length} exercises synced from exercises.json`;
             updateHeaderUI();
             renderPlanView();
             renderLibrary();
@@ -609,9 +644,7 @@
         const saved = localStorage.getItem("fit4less_iron_science_v2");
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (parsed && typeof parsed === "object") {
-            state = { ...state, ...parsed };
-          }
+          if (parsed && typeof parsed === "object") state = { ...state, ...parsed };
         }
       } catch (e) {}
     }
@@ -621,28 +654,21 @@
         localStorage.setItem("fit4less_iron_science_v2", JSON.stringify(state));
         const dot = document.getElementById("saveDot");
         if (dot) {
-          dot.classList.remove("bg-emerald-400");
-          dot.classList.add("bg-amber-400");
-          setTimeout(() => {
-            dot.classList.remove("bg-amber-400");
-            dot.classList.add("bg-emerald-400");
-          }, 400);
+          dot.classList.add("scale-150");
+          setTimeout(() => dot.classList.remove("scale-150"), 350);
         }
       } catch (e) {}
     }
 
     function ensureSchedulesInitialized() {
-      if (!state.schedules || typeof state.schedules !== "object") {
-        state.schedules = { 4: null, 5: null };
-      }
-      if (![4, 5].includes(Number(state.splitDays))) {
-        state.splitDays = 4;
-      }
+      if (!state.schedules || typeof state.schedules !== "object") state.schedules = { 4: null, 5: null };
+      if (![4, 5].includes(Number(state.splitDays))) state.splitDays = 4;
       [4, 5].forEach(days => {
         if (!Array.isArray(state.schedules[days]) || state.schedules[days].length !== days) {
           state.schedules[days] = JSON.parse(JSON.stringify(SPLIT_TEMPLATES[days]));
         }
       });
+      if (selectedPlanDay >= state.splitDays) selectedPlanDay = 0;
       saveState();
     }
 
@@ -656,20 +682,20 @@
       const t = document.getElementById("toast");
       t.textContent = msg;
       t.classList.remove("hidden");
-      setTimeout(() => t.classList.add("hidden"), 2400);
+      setTimeout(() => t.classList.add("hidden"), 2300);
     }
 
     function switchTab(tab) {
       ["plan", "workout", "library", "progress"].forEach(v => {
         document.getElementById(`view-${v}`).classList.add("hidden");
         const navBtn = document.getElementById(`nav-${v}`);
-        navBtn.classList.remove("text-amber-400");
+        navBtn.classList.remove("volt-text");
         navBtn.classList.add("text-slate-400");
       });
       document.getElementById(`view-${tab}`).classList.remove("hidden");
       const activeNav = document.getElementById(`nav-${tab}`);
       activeNav.classList.remove("text-slate-400");
-      activeNav.classList.add("text-amber-400");
+      activeNav.classList.add("volt-text");
 
       if (tab === "plan") renderPlanView();
       if (tab === "workout") renderActiveWorkout();
@@ -689,71 +715,96 @@
 
     function updateHeaderUI() {
       document.getElementById("unitBtn").textContent = state.unit.toUpperCase();
-      document.getElementById("dashVolumeUnit").textContent = state.unit;
+      document.getElementById("dashVolumeUnit").textContent = `Total ${state.unit.toUpperCase()}`;
       document.getElementById("dashDbCount").textContent = getAllExercises().length;
     }
 
     function setSplitDays(days) {
       state.splitDays = days;
+      if (selectedPlanDay >= days) selectedPlanDay = 0;
       ensureSchedulesInitialized();
+      renderPlanView();
+    }
+
+    function selectPlanDay(idx) {
+      selectedPlanDay = idx;
       renderPlanView();
     }
 
     function renderPlanView() {
       ensureSchedulesInitialized();
       const is4 = state.splitDays === 4;
-      document.getElementById("split4Btn").className = `px-3 py-1 rounded-full text-xs font-bold transition ${is4 ? "bg-amber-500 text-slate-950" : "text-slate-400 hover:text-white"}`;
-      document.getElementById("split5Btn").className = `px-3 py-1 rounded-full text-xs font-bold transition ${!is4 ? "bg-amber-500 text-slate-950" : "text-slate-400 hover:text-white"}`;
+      document.getElementById("split4Btn").className = `px-3 py-1 rounded-full text-xs font-extrabold transition ${is4 ? "volt-bg" : "text-slate-400 hover:text-white"}`;
+      document.getElementById("split5Btn").className = `px-3 py-1 rounded-full text-xs font-extrabold transition ${!is4 ? "volt-bg" : "text-slate-400 hover:text-white"}`;
 
       const totalVol = (state.history || []).reduce((sum, h) => sum + (h.totalVolume || 0), 0);
       document.getElementById("dashTotalVolume").textContent = totalVol.toLocaleString();
       document.getElementById("dashSessionsDone").textContent = (state.history || []).length;
       document.getElementById("dashDbCount").textContent = getAllExercises().length;
 
+      // Render 7-Day Activity Bar Chart (Reference Style)
       const schedule = state.schedules[state.splitDays];
-      const container = document.getElementById("scheduleList");
-      container.innerHTML = "";
-
-      const badgeColors = [
-        "from-amber-500/20 to-orange-500/10 text-amber-400 border-amber-500/25",
-        "from-purple-500/20 to-indigo-500/10 text-purple-400 border-purple-500/25",
-        "from-emerald-500/20 to-teal-500/10 text-emerald-400 border-emerald-500/25",
-        "from-sky-500/20 to-blue-500/10 text-sky-400 border-sky-500/25",
-        "from-rose-500/20 to-pink-500/10 text-rose-400 border-rose-500/25"
-      ];
-
-      schedule.forEach((day, idx) => {
-        const estMin = Math.min(60, Math.max(45, day.ids.length * 7));
-        const card = document.createElement("div");
-        card.className = "card-surface rounded-3xl p-4 flex items-center justify-between gap-3 transition hover:border-white/15";
-        card.innerHTML = `
-          <div class="flex items-center gap-3.5 min-w-0 flex-1 cursor-pointer" onclick="startSession(${idx})">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br ${badgeColors[idx % badgeColors.length]} border flex flex-col items-center justify-center shrink-0">
-              <span class="text-[9px] font-bold uppercase opacity-80">Day</span>
-              <span class="text-base font-extrabold leading-none">${idx + 1}</span>
-            </div>
-            <div class="min-w-0 flex-1">
-              <h4 class="text-sm font-bold text-white truncate">${day.title}</h4>
-              <p class="text-[11px] text-slate-400 truncate mt-0.5">${day.focus}</p>
-              <div class="flex items-center gap-2 mt-1.5 text-[10px] font-semibold text-slate-400">
-                <span class="text-amber-400">⏱ ~${estMin} min</span>
-                <span>•</span>
-                <span>${day.ids.length} exercises</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-2 shrink-0">
-            <button type="button" onclick="rotateDayExercises(${idx})" title="Rotate fresh variations" class="w-9 h-9 rounded-full card-elevated flex items-center justify-center text-slate-300 hover:text-amber-400 active:scale-90 transition">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-            </button>
-            <button type="button" onclick="startSession(${idx})" title="Start Session" class="w-10 h-10 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/20 active:scale-90 transition">
-              <svg class="w-4 h-4 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
+      const barChart = document.getElementById("weeklyBarChart");
+      const dayLabels = ["D1", "D2", "D3", "D4", "D5", "R1", "R2"];
+      barChart.innerHTML = dayLabels.map((lbl, idx) => {
+        const isTrainingDay = idx < schedule.length;
+        const isSelected = idx === selectedPlanDay;
+        const count = isTrainingDay ? schedule[idx].ids.length : 2;
+        const heightPct = isTrainingDay ? Math.min(100, Math.max(35, count * 11)) : 22;
+        return `
+          <div onclick="${isTrainingDay ? `selectPlanDay(${idx})` : ""}" class="flex flex-col items-center gap-1.5 h-full justify-end ${isTrainingDay ? "cursor-pointer" : "opacity-40"}">
+            <div class="w-full rounded-xl transition-all duration-300 ${isSelected ? "volt-bg shadow-lg shadow-[#d6ff00]/25" : "bg-[#252930]"}" style="height: ${heightPct}%"></div>
+            <span class="text-[10px] font-extrabold ${isSelected ? "volt-text" : "text-slate-500"}">${lbl}</span>
           </div>
         `;
-        container.appendChild(card);
-      });
+      }).join("");
+
+      // Day Selector Pills
+      const pillsContainer = document.getElementById("daySelectorPills");
+      pillsContainer.innerHTML = schedule.map((d, idx) => `
+        <button type="button" onclick="selectPlanDay(${idx})"
+          class="px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider whitespace-nowrap transition ${idx === selectedPlanDay ? "volt-bg" : "card-mid text-slate-300 hover:text-white"}">
+          Day ${idx + 1}
+        </button>
+      `).join("");
+
+      // Selected Day Blueprint & Editable Lineup
+      const activeDay = schedule[selectedPlanDay];
+      document.getElementById("shuffleDayNum").textContent = selectedPlanDay + 1;
+      document.getElementById("selectedDayLabelNum").textContent = selectedPlanDay + 1;
+      document.getElementById("ctaDayNum").textContent = selectedPlanDay + 1;
+      document.getElementById("featuredDayTitle").textContent = activeDay.title;
+      document.getElementById("featuredDayFocus").textContent = activeDay.focus;
+      document.getElementById("selectedDayCount").textContent = activeDay.ids.length;
+
+      const listEl = document.getElementById("selectedDayExerciseList");
+      if (activeDay.ids.length === 0) {
+        listEl.innerHTML = `<div class="p-3 rounded-2xl bg-[#0b0c0e] text-xs text-slate-400 text-center">No exercises in Day ${selectedPlanDay + 1} yet. Tap "+ Add Movement" above.</div>`;
+      } else {
+        listEl.innerHTML = activeDay.ids.map((id, exIdx) => {
+          const ex = getExerciseById(id);
+          if (!ex) return "";
+          return `
+            <div class="flex items-center justify-between gap-2 px-3 py-2.5 rounded-2xl bg-[#0b0c0e]/90 border border-white/5">
+              <div class="min-w-0">
+                <p class="text-xs font-bold text-white truncate">${ex.name}</p>
+                <p class="text-[10px] text-slate-400">${ex.muscle} • ${ex.type} • ${ex.sets} × ${ex.target}</p>
+              </div>
+              <button type="button" onclick="removeExerciseFromPlanDay(${selectedPlanDay}, ${exIdx})" title="Remove from Day ${selectedPlanDay + 1}"
+                class="w-7 h-7 rounded-full card-mid flex items-center justify-center text-xs text-slate-400 hover:text-rose-400 shrink-0">
+                ✕
+              </button>
+            </div>
+          `;
+        }).join("");
+      }
+    }
+
+    function removeExerciseFromPlanDay(dayIdx, exIdx) {
+      state.schedules[state.splitDays][dayIdx].ids.splice(exIdx, 1);
+      saveState();
+      renderPlanView();
+      showToast(`Removed from Day ${dayIdx + 1}`);
     }
 
     function rotateDayExercises(dayIdx) {
@@ -778,7 +829,7 @@
 
       saveState();
       renderPlanView();
-      showToast(`Day ${dayIdx + 1} rotated with fresh movements`);
+      showToast(`Day ${dayIdx + 1} shuffled`);
     }
 
     function startSession(dayIdx) {
@@ -792,11 +843,7 @@
           const prev = state.logs[id]?.lastSets || [];
           const rows = [];
           for (let i = 0; i < ex.sets; i++) {
-            rows.push({
-              w: prev[i]?.w ?? "",
-              r: prev[i]?.r ?? "",
-              done: false
-            });
+            rows.push({ w: prev[i]?.w ?? "", r: prev[i]?.r ?? "", done: false });
           }
           currentSessionSets[id] = rows;
         }
@@ -809,7 +856,7 @@
       const day = state.schedules[state.splitDays][activeDayIndex];
       if (!day) return;
 
-      document.getElementById("activeDayBadge").textContent = `Day ${activeDayIndex + 1} • ${state.splitDays}-Day Split`;
+      document.getElementById("activeDayBadge").textContent = `DAY ${activeDayIndex + 1} • ${state.splitDays}-DAY SPLIT`;
       document.getElementById("activeDayTitle").textContent = day.title;
       document.getElementById("activeDayMeta").textContent = `${day.ids.length} Exercises • ~${Math.min(60, Math.max(45, day.ids.length * 7))} min`;
 
@@ -828,16 +875,8 @@
           ? "Last: " + prevLog.lastSets.map(s => ex.mode === "time" ? `${s.w ? s.w + state.unit + " × " : ""}${s.r}s` : `${s.w || 0}${state.unit}×${s.r || 0}`).join(", ")
           : "No previous log yet";
 
-        const typeColors = {
-          Compound: "bg-amber-500/15 text-amber-400",
-          Hypertrophy: "bg-purple-500/15 text-purple-400",
-          Functional: "bg-emerald-500/15 text-emerald-400",
-          Isometric: "bg-sky-500/15 text-sky-400",
-          Mobility: "bg-rose-500/15 text-rose-400"
-        };
-
         const card = document.createElement("div");
-        card.className = "card-surface rounded-3xl p-4 space-y-3";
+        card.className = "card-dark rounded-3xl p-4 space-y-3";
 
         let setsHtml = "";
         currentSessionSets[id].forEach((setRow, sIdx) => {
@@ -848,16 +887,16 @@
               <div class="col-span-4">
                 <input type="number" step="any" placeholder="${isTimed ? "BW / " + state.unit : state.unit}" value="${setRow.w}"
                   onchange="updateSetInput('${id}', ${sIdx}, 'w', this.value)"
-                  class="w-full py-2 px-2 rounded-xl bg-[#0d0e12] border border-white/10 text-center text-sm font-bold text-white focus:outline-none focus:border-amber-500" />
+                  class="w-full py-2 px-2 rounded-xl bg-[#0b0c0e] border border-white/10 text-center text-sm font-bold text-white focus:outline-none focus:border-[#d6ff00]" />
               </div>
               <div class="col-span-4">
                 <input type="number" step="any" placeholder="${isTimed ? "sec" : ex.target}" value="${setRow.r}"
                   onchange="updateSetInput('${id}', ${sIdx}, 'r', this.value)"
-                  class="w-full py-2 px-2 rounded-xl bg-[#0d0e12] border border-white/10 text-center text-sm font-bold text-white focus:outline-none focus:border-amber-500" />
+                  class="w-full py-2 px-2 rounded-xl bg-[#0b0c0e] border border-white/10 text-center text-sm font-bold text-white focus:outline-none focus:border-[#d6ff00]" />
               </div>
               <div class="col-span-2 flex justify-center">
                 <button type="button" onclick="toggleSetDone('${id}', ${sIdx}, ${ex.rest || 90}, '${ex.mode}', '${ex.target}')"
-                  class="w-9 h-9 rounded-xl flex items-center justify-center font-bold transition ${setRow.done ? "bg-emerald-500 text-slate-950" : "card-elevated text-slate-400 hover:text-white"}">
+                  class="w-9 h-9 rounded-full flex items-center justify-center font-extrabold transition ${setRow.done ? "volt-bg" : "card-mid text-slate-400 hover:text-white"}">
                   ✓
                 </button>
               </div>
@@ -869,21 +908,21 @@
           <div class="flex items-start justify-between gap-2">
             <div>
               <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${typeColors[ex.type] || "bg-slate-700 text-slate-300"}">${ex.type}</span>
+                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#d6ff00]/15 volt-text uppercase">${ex.type}</span>
                 <span class="text-[10px] font-semibold text-slate-400">${ex.muscle} • ${ex.equip}</span>
               </div>
               <h3 class="text-sm font-extrabold text-white mt-1">${ex.name}</h3>
             </div>
             <div class="flex items-center gap-1.5 shrink-0">
-              <button type="button" onclick="openTimerModal(${ex.mode === "time" ? parseInt(ex.target) || 40 : ex.rest || 90}, '${ex.name.replace(/'/g, "")}')" class="px-2.5 py-1 rounded-xl card-elevated text-[10px] font-bold text-amber-400">
+              <button type="button" onclick="openTimerModal(${ex.mode === "time" ? parseInt(ex.target) || 40 : ex.rest || 90}, '${ex.name.replace(/'/g, "")}')" class="px-2.5 py-1 rounded-full card-mid text-[10px] font-extrabold volt-text">
                 ⏱ ${ex.mode === "time" ? ex.target : (ex.rest || 90) + "s"}
               </button>
-              <button type="button" onclick="removeExerciseFromDay(${exIndex})" title="Remove from today" class="w-7 h-7 rounded-xl card-elevated text-xs text-slate-400 hover:text-rose-400">✕</button>
+              <button type="button" onclick="removeExerciseFromDay(${exIndex})" title="Remove from today" class="w-7 h-7 rounded-full card-mid text-xs text-slate-400 hover:text-rose-400">✕</button>
             </div>
           </div>
 
-          <p class="text-[11px] text-slate-400 bg-[#0d0e12]/80 px-3 py-2 rounded-2xl border border-white/5">
-            <span class="text-amber-400 font-bold">Cue:</span> ${ex.science || "Control eccentric phase and full range of motion."}
+          <p class="text-[11px] text-slate-400 bg-[#0b0c0e]/90 px-3 py-2 rounded-2xl border border-white/5">
+            <span class="volt-text font-bold">Cue:</span> ${ex.science || "Control eccentric phase and full range of motion."}
           </p>
 
           <div class="flex items-center justify-between text-[11px] text-emerald-400 font-semibold px-1">
@@ -901,7 +940,7 @@
           <div class="space-y-2">${setsHtml}</div>
 
           <div class="flex items-center justify-between pt-1">
-            <button type="button" onclick="addSetRow('${id}')" class="text-xs font-bold text-amber-400 hover:underline">+ Add Set</button>
+            <button type="button" onclick="addSetRow('${id}')" class="text-xs font-extrabold volt-text hover:underline">+ Add Set</button>
             ${currentSessionSets[id].length > 1 ? `<button type="button" onclick="removeSetRow('${id}')" class="text-xs font-semibold text-slate-500 hover:text-slate-300">- Remove Set</button>` : ""}
           </div>
         `;
@@ -922,12 +961,10 @@
         if (completed.length > 0) {
           const prevBestW = state.logs[exId]?.bestWeight || 0;
           const prevBestR = state.logs[exId]?.bestReps || 0;
-          const maxW = Math.max(prevBestW, ...completed.map(s => parseFloat(s.w) || 0));
-          const maxR = Math.max(prevBestR, ...completed.map(s => parseFloat(s.r) || 0));
           state.logs[exId] = {
             lastSets: completed.map(s => ({ w: s.w, r: s.r })),
-            bestWeight: maxW,
-            bestReps: maxR,
+            bestWeight: Math.max(prevBestW, ...completed.map(s => parseFloat(s.w) || 0)),
+            bestReps: Math.max(prevBestR, ...completed.map(s => parseFloat(s.r) || 0)),
             updatedAt: new Date().toISOString()
           };
           saveState();
@@ -955,6 +992,8 @@
       state.schedules[state.splitDays][activeDayIndex].ids.splice(exIndex, 1);
       saveState();
       renderActiveWorkout();
+      renderPlanView();
+      showToast("Exercise removed");
     }
 
     function finishWorkoutSession() {
@@ -991,11 +1030,14 @@
 
       currentSessionSets = {};
       saveState();
-      showToast("Session saved & progression updated!");
+      showToast("Session completed & saved!");
       switchTab("progress");
     }
 
-    function openQuickAddToDayModal() {
+    // Quick Add Modal (Works for Both Plan Day Customizer & Active Workout)
+    function openQuickAddToDayModal(targetDayIdx) {
+      quickAddTargetDay = typeof targetDayIdx === "number" ? targetDayIdx : selectedPlanDay;
+      document.getElementById("quickAddTargetDayLabel").textContent = quickAddTargetDay + 1;
       document.getElementById("quickAddModal").classList.remove("hidden");
       renderQuickAddList();
     }
@@ -1009,27 +1051,31 @@
       const list = document.getElementById("quickAddList");
       const matches = getAllExercises().filter(e =>
         e.name.toLowerCase().includes(q) || e.muscle.toLowerCase().includes(q) || e.type.toLowerCase().includes(q)
-      ).slice(0, 25);
+      ).slice(0, 30);
 
       list.innerHTML = matches.map(ex => `
-        <div onclick="addExerciseToCurrentDay('${ex.id}')" class="p-3 rounded-2xl bg-[#0d0e12] border border-white/5 flex items-center justify-between cursor-pointer hover:border-amber-500/40">
+        <div onclick="addExerciseToTargetDay('${ex.id}')" class="p-3 rounded-2xl bg-[#0b0c0e] border border-white/5 flex items-center justify-between cursor-pointer hover:border-[#d6ff00]/40">
           <div>
             <p class="text-xs font-bold text-white">${ex.name}</p>
             <p class="text-[10px] text-slate-400">${ex.muscle} • ${ex.type} • ${ex.equip}</p>
           </div>
-          <span class="text-xs font-bold text-amber-400">+ Add</span>
+          <span class="text-xs font-extrabold volt-text">+ Add</span>
         </div>
       `).join("");
     }
 
-    function addExerciseToCurrentDay(exId) {
-      state.schedules[state.splitDays][activeDayIndex].ids.push(exId);
+    function addExerciseToTargetDay(exId) {
+      state.schedules[state.splitDays][quickAddTargetDay].ids.push(exId);
       saveState();
       closeQuickAddModal();
-      renderActiveWorkout();
-      showToast("Added to today's workout");
+      renderPlanView();
+      if (!document.getElementById("view-workout").classList.contains("hidden")) {
+        renderActiveWorkout();
+      }
+      showToast(`Added to Day ${quickAddTargetDay + 1}`);
     }
 
+    // Library & Custom Exercise Creation
     function toggleAddExerciseForm() {
       document.getElementById("customExerciseForm").classList.toggle("hidden");
     }
@@ -1065,17 +1111,18 @@
       e.target.reset();
       toggleAddExerciseForm();
       updateHeaderUI();
+      renderPlanView();
       renderLibrary();
-      showToast(`"${newEx.name}" added to database!`);
+      showToast(`"${newEx.name}" saved!`);
     }
 
     function setLibFilter(filter) {
       libFilter = filter;
       document.querySelectorAll(".lib-filter-btn").forEach(btn => {
         if (btn.textContent === filter) {
-          btn.className = "lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold bg-amber-500 text-slate-950 whitespace-nowrap";
+          btn.className = "lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-extrabold volt-bg whitespace-nowrap";
         } else {
-          btn.className = "lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-surface text-slate-300 whitespace-nowrap";
+          btn.className = "lib-filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold card-dark text-slate-300 whitespace-nowrap";
         }
       });
       renderLibrary();
@@ -1091,18 +1138,18 @@
 
       const container = document.getElementById("libraryList");
       container.innerHTML = items.map(ex => `
-        <div class="card-surface rounded-3xl p-4 space-y-1.5">
+        <div class="card-dark rounded-3xl p-4 space-y-1.5">
           <div class="flex items-start justify-between gap-2">
             <div>
               <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400">${ex.type}</span>
+                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-[#d6ff00]/15 volt-text uppercase">${ex.type}</span>
                 <span class="text-[10px] font-semibold text-slate-400">${ex.muscle} • ${ex.equip}</span>
                 ${ex.isCustom ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400">Custom</span>` : ""}
               </div>
               <h4 class="text-sm font-bold text-white mt-1">${ex.name}</h4>
             </div>
-            <button type="button" onclick="quickInjectToDay1('${ex.id}')" class="px-2.5 py-1.5 rounded-xl card-elevated text-[10px] font-bold text-slate-200 hover:text-amber-400 shrink-0">
-              + Day ${activeDayIndex + 1}
+            <button type="button" onclick="quickInjectToSelectedDay('${ex.id}')" class="px-3 py-1.5 rounded-full card-mid text-[10px] font-extrabold volt-text shrink-0">
+              + Day ${selectedPlanDay + 1}
             </button>
           </div>
           <p class="text-[11px] text-slate-400 leading-relaxed">${ex.science}</p>
@@ -1110,51 +1157,23 @@
       `).join("");
     }
 
-    function quickInjectToDay1(exId) {
-      state.schedules[state.splitDays][activeDayIndex].ids.push(exId);
+    function quickInjectToSelectedDay(exId) {
+      state.schedules[state.splitDays][selectedPlanDay].ids.push(exId);
       saveState();
-      showToast(`Added to Day ${activeDayIndex + 1}`);
+      renderPlanView();
+      showToast(`Added to Day ${selectedPlanDay + 1}`);
     }
 
+    // Progress View
     function renderProgressView() {
-      const targetWeekly = state.splitDays;
-      const doneCount = Math.min(targetWeekly, state.history.length);
-      const pct = Math.round((doneCount / targetWeekly) * 100);
-      const circumference = 314.16;
-      const offset = circumference - (pct / 100) * circumference;
-
-      document.getElementById("progressRingCircle").style.strokeDashoffset = offset;
-      document.getElementById("ringPercentLabel").textContent = `${pct}%`;
-      document.getElementById("ringMainValue").textContent = `${doneCount}/${targetWeekly}`;
-
-      const totalSets = state.history.reduce((s, h) => s + (h.setsCount || 0), 0);
       const trackedIds = Object.keys(state.logs);
-      document.getElementById("statTotalSets").textContent = totalSets;
-      document.getElementById("statPrCount").textContent = trackedIds.length;
-
-      let push = 0, pull = 0, legsCore = 0;
-      trackedIds.forEach(id => {
-        const ex = getExerciseById(id);
-        if (!ex) return;
-        if (["Chest", "Shoulders", "Arms"].includes(ex.muscle)) push++;
-        else if (ex.muscle === "Back") pull++;
-        else legsCore++;
-      });
-      const maxCat = Math.max(1, push, pull, legsCore);
-      document.getElementById("barPushText").textContent = push;
-      document.getElementById("barPushFill").style.width = `${(push / maxCat) * 100}%`;
-      document.getElementById("barPullText").textContent = pull;
-      document.getElementById("barPullFill").style.width = `${(pull / maxCat) * 100}%`;
-      document.getElementById("barLegsText").textContent = legsCore;
-      document.getElementById("barLegsFill").style.width = `${(legsCore / maxCat) * 100}%`;
-
       if (state.lastExported) {
         document.getElementById("backupLastExportText").textContent = `Last exported: ${state.lastExported}`;
       }
 
       const prContainer = document.getElementById("prListContainer");
       if (trackedIds.length === 0) {
-        prContainer.innerHTML = `<div class="card-surface rounded-2xl p-4 text-xs text-slate-400">Complete sets in any workout to see your personal records and progression here.</div>`;
+        prContainer.innerHTML = `<div class="card-dark rounded-2xl p-4 text-xs text-slate-400">Complete sets in any workout to see your personal records here.</div>`;
       } else {
         prContainer.innerHTML = trackedIds.map(id => {
           const ex = getExerciseById(id);
@@ -1164,12 +1183,12 @@
             ? `${log.bestReps}s Best Hold`
             : `${log.bestWeight}${state.unit} × ${log.bestReps} reps`;
           return `
-            <div class="card-surface rounded-2xl p-3.5 flex items-center justify-between">
+            <div class="card-dark rounded-2xl p-3.5 flex items-center justify-between">
               <div>
                 <p class="text-xs font-bold text-white">${ex.name}</p>
                 <p class="text-[10px] text-slate-400">${ex.muscle} • ${ex.type}</p>
               </div>
-              <span class="px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-400 text-xs font-extrabold">${badge}</span>
+              <span class="px-2.5 py-1 rounded-full bg-[#d6ff00]/15 volt-text text-xs font-extrabold">${badge}</span>
             </div>
           `;
         }).join("");
@@ -1177,20 +1196,21 @@
 
       const histContainer = document.getElementById("historyListContainer");
       if (state.history.length === 0) {
-        histContainer.innerHTML = `<div class="card-surface rounded-2xl p-4 text-xs text-slate-400">No completed sessions yet. Tap Play on Day 1 to start!</div>`;
+        histContainer.innerHTML = `<div class="card-dark rounded-2xl p-4 text-xs text-slate-400">No completed sessions yet. Tap Start Building Your Body to begin!</div>`;
       } else {
-        histContainer.innerHTML = state.history.slice(0, 10).map(h => `
-          <div class="card-surface rounded-2xl p-3.5 flex items-center justify-between">
+        histContainer.innerHTML = state.history.slice(0, 12).map(h => `
+          <div class="card-dark rounded-2xl p-3.5 flex items-center justify-between">
             <div>
               <p class="text-xs font-bold text-white">${h.dayTitle}</p>
               <p class="text-[10px] text-slate-400">${h.date} • ${h.setsCount} sets</p>
             </div>
-            <span class="text-xs font-extrabold text-emerald-400">${(h.totalVolume || 0).toLocaleString()} ${state.unit}</span>
+            <span class="text-xs font-extrabold volt-text">${(h.totalVolume || 0).toLocaleString()} ${state.unit}</span>
           </div>
         `).join("");
       }
     }
 
+    // Timer Logic
     function openTimerModal(seconds, title) {
       timerDefault = seconds;
       timerSeconds = seconds;
@@ -1262,6 +1282,7 @@
       } catch (e) {}
     }
 
+    // JSON Backup Export & Import
     function openBackupModal() {
       document.getElementById("importPreviewBox").classList.add("hidden");
       document.getElementById("modalBackupMeta").innerHTML = `
@@ -1283,8 +1304,8 @@
       saveState();
 
       const payload = {
-        app: "Fit4Less Iron & Science",
-        version: 2,
+        app: "Fit4Less Volt Iron",
+        version: 3,
         exportedAt: new Date().toISOString(),
         data: state
       };
@@ -1320,7 +1341,7 @@
           const parsed = JSON.parse(e.target.result);
           const importedState = parsed.data ? parsed.data : parsed;
           if (!importedState || typeof importedState !== "object" || !importedState.logs) {
-            showToast("Invalid Fit4Less backup file");
+            showToast("Invalid backup file");
             return;
           }
           pendingImportData = importedState;
